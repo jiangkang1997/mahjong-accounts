@@ -1,0 +1,29 @@
+﻿<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>麻将记账系统登录</title>
+<link th:href="@{/css/login.css}" href="../static/css/login.css" rel="stylesheet" type="text/css"/>
+<script src="../static/lib/jquery/jquery-3.2.1.min.js" th:src="@{/lib/jquery/jquery-3.2.1.min.js}"></script>
+</head>
+<body>
+<div class="htmleaf-container">
+    <div class="wrapper">
+        <div class="container">
+            <h1>Welcome</h1>
+
+            <form class="form" action="/interface/user/login" method="post">
+                <input type="text" id="loginName" name="loginName" placeholder="Username">
+                <input type="password" id="password" name="password" placeholder="Password">
+                <button type="submit" id="login-button">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';color:#000000">
+    <h1>麻将记账系统</h1>
+</div>
+
+</body>
+</html>

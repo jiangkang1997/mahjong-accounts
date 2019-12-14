@@ -1,0 +1,232 @@
+.main_header{
+    position: relative;
+    width: 1150px;
+    height: 80px;
+    margin: 0 auto;
+    box-shadow: 0 12px 24px 0 rgba(7,17,27,.2);
+    color: #787d82;
+}
+.log{
+    width: 250px;
+    height: 80px;
+    float: left;
+    color: #000000;
+}
+.sign{
+    width:150px ;
+    float: left;
+    margin: 16px 5px;
+    font-size: 14px;
+}
+.log img{
+    margin:10px 5px;
+    display: block;
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+.search{
+    width: 310px;
+    height: 80px;
+    float: left;
+}
+.search   form{
+    position: relative;
+    width: inherit;
+    margin-top: 5px;
+}
+.search form input{
+    width: inherit;
+    height: 70px;
+    border: none;
+    border-bottom: solid 2px #000000;
+    line-height: 70px;
+}
+.search form input[type='submit']{
+    background: url("/store/image/link.jpg");
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top:18px;
+    border: none;
+    background-repeat: no-repeat;
+}
+.download{
+    width: 70px;
+    height: inherit;
+    float: right;
+    line-height: 80px;
+    margin-right: 10px;
+}
+.download a{
+    text-decoration: none;
+    color: inherit;
+}
+.download a:hover{
+    color: #ff0000;
+}
+.shopping{
+    width: 112px;
+    height: 32px;
+    float: right;
+    margin: 24px;
+    line-height: 32px;
+    border-radius: 18px;
+    padding: 0 10px;
+    border: solid 1px rgba(190, 190, 190, 0.80);
+    box-shadow: 2px 2px 2px black;
+    margin-right: 10px;
+}
+.shopping span{
+    width: inherit;
+    height: inherit;
+}
+.shopping span a{
+    text-decoration: none;
+    color: inherit;
+}
+.shopping span a:hover{
+    color: red;
+}
+.login{
+    width: 72px;
+    height: inherit;
+    line-height: 80px;
+    float
+    : right;
+    position: relative;
+    margin-right: 10px;
+}
+
+.login a{
+    text-decoration: none;
+    color:inherit;
+}
+.login a:hover{
+    color: red;
+}
+
+.login .personal_msg{
+    width: 306px;
+    height: 244px;
+    position: absolute;
+    top:80px;
+    right: -5px;
+    background-color: white;
+    z-index: 1;
+    display: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 8px 16px 0 rgba(7,17,27,.2);
+    box-sizing: border-box;
+    padding: 24px;
+}
+.personal_msg a{
+    text-decoration: none;
+}
+.personal_msg .top_part{
+    width: 258px;
+    height: 76px;
+    margin-bottom: 5px;
+}
+.personal_msg .center_part{
+    width: 258px;
+    height: 76px;
+
+    margin-bottom: 5px;
+}
+.personal_msg .bottom_part{
+    width: 258px;
+    height: 30px;
+    margin-bottom: 5px;
+
+}
+.personal_msg .user_img{
+    display: block;
+    width: 72px;
+    height: 72px;
+    float: left;
+    border-radius: 36px;
+    overflow: hidden;
+}
+
+.user_img img{
+    width: inherit;
+    height: inherit;
+}
+.personal_msg .user_txt{
+    width: 171px;
+    height: 72px;
+    float: left;
+    padding-left: 15px ;
+}
+.user_txt .user_name{
+    width: inherit;
+    height: 30px;
+
+}
+.user_name a{
+    display: block;
+    height: inherit;
+    width: inherit;
+    margin-top: -20px;
+}
+.user_txt .user_integral{
+    width: inherit;
+    height: 30px;
+    font-size: smaller;
+}
+.center_part ul{
+    width: inherit;
+    height: inherit;
+    list-style: none;
+    text-align: center;
+    color: #787d82;
+}
+.center_part li{
+    width: 128px;
+    height: 36px;
+    background-color: #e1e6eb;
+    float: left;
+    margin-left: 1px;
+    margin-bottom: 1px;
+}
+
+.center_part li a{
+    display: block;
+    width: inherit;
+    height: inherit;
+    line-height: 36px;
+}
+.center_part li a:hover{
+    background-color: #acacac;
+    color: black;
+}
+.bottom_part a{
+    display: block;
+    width: 56px;
+    height: 16px;
+    color: #787d82;
+    font-size: small;
+}
+.bottom_part a:hover{
+    color: black;
+}
+.login .customer_img{
+    position: absolute;
+    width:72px ;
+    height: inherit;
+    top: 0;
+
+    display: none;
+}
+.customer_img img{
+    width: 40px;
+    height: 40px;
+    margin: 20px 16px;
+    border-radius: 20px;
+}
+.customer_img img:hover{
+    border: solid 2px red;
+}

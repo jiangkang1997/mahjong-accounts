@@ -1,0 +1,253 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 微软雅黑;
+}
+.main{
+    width: 1190px;
+
+    margin: 0 auto;
+}
+.main .goods_type{
+    width: inherit;
+    height: 50px;
+    line-height: 50px;
+    list-style: none;
+}
+.main .main_content{
+    width: inherit;
+    height: 300px;
+}
+.main .goods_type li{
+    display: block;
+    width: 124px;
+    height: inherit;
+    line-height: 50px;
+    box-sizing: border-box;
+    border-bottom: solid 2px #e6e6e6;
+
+    padding: 0 26px;
+}
+
+.goods_th{
+    width: inherit;
+    height: 50px;
+}
+.goods_th .goods_msg{
+    width: 392px;
+    height: 50px;
+    line-height: 50px;
+    box-sizing: border-box;
+    padding-left:152px;
+    float: left;
+}
+.goods_th .uit_price,.goods_th .goods_num,.goods_th .total_price,.goods_th .operate{
+    width: 130px;
+    height: 50px;
+    float: right;
+    line-height: 50px;
+    box-sizing: border-box;
+    padding-left: 30px;
+}
+.single_goods{
+    width: 1190px;
+    height: 120px;
+    border: solid 1px #909090;
+    margin: 5px 0;
+ }
+.single_goods .check_goods{
+    width: 50px;
+    height: 120px;
+    float: left;
+
+}
+.single_goods .check_goods input{
+    width: 20px;
+    height: 20px;
+    margin: 50px 10px;
+    background: white;
+}
+.single_goods .good_img{
+    width: 80px;
+    height:80px;
+    float: left;
+    margin:20px 10px ;
+}
+.single_goods .good_img img{
+    width: inherit;
+    height: inherit;
+    display: block;
+}
+.single_goods .goods_name{
+    float: left;
+    width: 226px;
+    height: 40px;
+    margin: 40px 10px;
+}
+.single_goods .uit_price,.single_goods .total_price,.single_goods .operate{
+    width: 130px;
+    height: 120px;
+    line-height: 120px;
+    float: right;
+    box-sizing: border-box;
+    padding-left: 27px;
+}
+.single_goods .goods_num{
+    width: 130px;
+    height: 120px;
+    float: right;
+    box-sizing: border-box;
+}
+.operate form{
+    width: 30px;
+    height: inherit;
+}
+.operate input{
+    width: inherit;
+    height: 20px;
+    border: none;
+    display: block;
+    margin-top: 50px;
+    background-color: transparent;
+}
+.goods_num input{
+    width: 42px;
+    height: 26px;
+    text-align: center;
+    float: left;
+    display: block;
+}
+.goods_num div{
+    height: 30px;
+    width: 120px;
+    margin-top: 45px;
+}
+.goods_num p{
+    display: block;
+    width: 30px;
+    height: 28px;
+    float: left;
+    line-height: 30px;
+    text-align: center;
+    background-color: #f0f0f0;
+    border: 1px solid #e5e5e5;
+    text-decoration: none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.goods_num p:hover{
+    color: red;
+    border-color: red;
+    cursor:default;
+}
+.total_price .goods_all_price{
+    font-size: larger;
+    color: red;
+    font-weight: 900;
+}
+.clear{
+    width: 1190px;
+    height: 50px;
+    margin: 0 auto;
+    background: #e5e5e5;
+    margin: 10px 0;
+}
+.clear .general_election{
+    width: 70px;
+    height: 50px;
+    margin: 0 10px;
+    float: left;
+
+}
+/*.clear .general_election div{
+    width: inherit;
+    height: 21px;
+}*/
+.clear .general_election>span{
+    line-height: 20px;
+    height:20px ;
+    display: block;
+
+    margin-top: 15px;
+}
+.clear .general_election>span>span{
+    display: block;
+    margin-top: 0;
+    float: left;
+    margin: 0 5px;
+}
+.clear .general_election input{
+    width: 20px;
+    height: 20px;
+    display: block;
+    background: white;
+    float: left;
+}
+
+.delete {
+    width: 72px;
+    height: 50px;
+    float: left;
+    margin: 0 15px;
+}
+.delete form{
+    height: inherit;
+    width: inherit;
+}
+.delete .delete_submit{
+    height: 20px;
+    width: 30px;
+    border: none;
+    display: block;
+    margin-top: 15px;
+    background-color: transparent;
+}
+.clear .selected_num {
+    width: 130px;
+    height: 50px;
+    float: right;
+}
+.clear .selected_num span{
+    line-height: 50px;
+    box-sizing: border-box;
+}
+.clear .selected_num .num{
+    color: red;
+    font-weight: 800;
+    font-size: large;
+    padding: 0 5px;
+}
+.clear .all_price{
+    width: 240px;
+    height: 50px;
+    float: right;
+}
+.clear .all_price span{
+    line-height: 50px;
+}
+.clear .clear_button{
+    width: 120px;
+    height: 50px;
+    float: right;
+
+}
+.clear_button form{
+    width: inherit;
+    height: inherit;
+}
+.clear_button input{
+    width: inherit;
+    height: inherit;
+    background-color: #B0B0B0;
+    border: none;
+    font-size: larger;
+    font-weight: 800;
+    color: white;
+}
+.clear .all_price .price{
+    color: red;
+    font-weight: 800;
+    font-size: 20px;
+}
