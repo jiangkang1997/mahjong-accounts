@@ -5,6 +5,7 @@ import com.jk.mahjongaccounts.common.ResponseBuilder;
 import com.jk.mahjongaccounts.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseBuilder login(String userName, String password){
-        if(userName == "" || password == ""){
+        if(StringUtils.isEmpty(userName)  || StringUtils.isEmpty(password)){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }
         try {
@@ -42,7 +43,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseBuilder register(String userName, String password){
-        if(userName == null || password == null){
+        if(StringUtils.isEmpty(userName)  || StringUtils.isEmpty(password)){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }
         try {
@@ -58,7 +59,7 @@ public class UserController {
 
     @PostMapping("/isUserExist")
     public ResponseBuilder isUserExist(String userName){
-        if(userName == ""){
+        if(StringUtils.isEmpty(userName)){
             return ResponseBuilder.builderFail("参数不能为空");
         }
         Boolean exist;

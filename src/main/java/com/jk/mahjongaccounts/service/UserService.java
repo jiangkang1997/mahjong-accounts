@@ -14,7 +14,7 @@ public interface UserService {
      * @param password
      * @throws BusinessException
      */
-    void register(String userName,String password) throws BusinessException;
+     void register(String userName,String password) throws BusinessException;
 
     /**
      * 登录

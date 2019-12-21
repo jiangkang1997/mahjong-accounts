@@ -24,10 +24,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void register(String userName, String password) throws BusinessException {
+    public synchronized void register(String userName, String password) throws BusinessException {
+        System.out.println(userName);
         if(userMapper.getByUserName(userName) != null){
+            System.out.println("throw");
             throw new BusinessException("该id已存在");
         }
+        System.out.println(" not throw");
         User user = new User(userName,password);
         userMapper.insert(user);
     }
