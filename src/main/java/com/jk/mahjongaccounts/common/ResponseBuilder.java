@@ -14,20 +14,30 @@ public class ResponseBuilder{
     private Integer code;
 
     /**
+     * 返回的数据
+     */
+    private Object data;
+
+    /**
      * 返回消息
      */
     private String message;
 
-    private ResponseBuilder(int status, String description) {
+    private ResponseBuilder(int status, Object data,String message) {
         this.code = status;
-        this.message = description;
+        this.data = data;
+        this.message = message;
     }
 
     public static ResponseBuilder builderSuccess(){
-        return new ResponseBuilder(0,"success");
+        return new ResponseBuilder(0,null,"success");
+    }
+
+    public static ResponseBuilder builderSuccess(Object data){
+        return new ResponseBuilder(0,data,"success");
     }
 
     public static ResponseBuilder builderFail(String message){
-        return  new ResponseBuilder(-1,message);
+        return  new ResponseBuilder(-1,null,message);
     }
 }

@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void register(String userName, String password) throws Exception {
+    public void register(String userName, String password) throws BusinessException {
         if(userMapper.getByUserName(userName) != null){
             throw new BusinessException("该id已存在");
         }
@@ -33,11 +33,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String userName, String password) throws Exception {
+    public User login(String userName, String password) throws BusinessException {
         User user = userMapper.login(userName, password);
         if(user == null){
             throw new BusinessException("账号或密码错误");
         }
         return user;
+    }
+
+    @Override
+    public boolean isUserExist(String userName){
+        if(userMapper.getByUserName(userName) == null){
+            return false;
+        }else {
+            return true;
+        }
     }
 }

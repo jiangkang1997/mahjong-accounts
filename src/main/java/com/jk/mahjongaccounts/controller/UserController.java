@@ -50,8 +50,24 @@ public class UserController {
         }catch (BusinessException e){
             return ResponseBuilder.builderFail(e.getMessage());
         } catch (Exception e) {
+            log.error(e.getMessage(),e);
             return ResponseBuilder.builderFail("系统错误");
         }
         return ResponseBuilder.builderSuccess();
+    }
+
+    @PostMapping("/isUserExist")
+    public ResponseBuilder isUserExist(String userName){
+        if(userName == null){
+            return ResponseBuilder.builderFail("参数不能为空");
+        }
+        Boolean exist;
+        try {
+            exist = userService.isUserExist(userName);
+        }catch (Exception e) {
+            log.error(e.getMessage(),e);
+            return ResponseBuilder.builderFail("系统错误");
+        }
+        return ResponseBuilder.builderSuccess(exist);
     }
 }
