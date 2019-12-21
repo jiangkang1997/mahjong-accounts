@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseBuilder login(String userName, String password){
-        if(userName == null || password == null){
+        if(userName == "" || password == ""){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }
         try {
@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping("/isUserExist")
     public ResponseBuilder isUserExist(String userName){
-        if(userName == null){
+        if(userName == ""){
             return ResponseBuilder.builderFail("参数不能为空");
         }
         Boolean exist;

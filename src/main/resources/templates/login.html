@@ -5,19 +5,13 @@
 <title>麻将记账系统登录</title>
 <link th:href="@{/css/login.css}" href="../static/css/login.css" rel="stylesheet" type="text/css"/>
 <script src="../static/lib/jquery/jquery-3.2.1.min.js" th:src="@{/lib/jquery/jquery-3.2.1.min.js}"></script>
+    <script src="../static/lib/jquery/login.js" th:src="@{/lib/jquery/login.js}"></script>
 </head>
-<body>
+<body >
 <div class="htmleaf-container">
     <div class="wrapper">
-        <div class="container">
-            <h1>Welcome</h1>
-
-            <form class="form" action="/interface/user/login" method="post">
-                <input type="text" id="loginName" name="loginName" placeholder="Username">
-                <input type="password" id="password" name="password" placeholder="Password">
-                <button type="submit" id="login-button">Login</button>
-            </form>
-        </div>
+        <div id = "loginFrame" class="container">
+                  </div>
     </div>
 </div>
 
