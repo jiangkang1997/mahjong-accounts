@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userName, String password){
+    public ResponseBuilder login(String userName, String password){
         if(userName == null || password == null){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(String userName, String password){
+    public ResponseBuilder register(String userName, String password){
         if(userName == null || password == null){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }

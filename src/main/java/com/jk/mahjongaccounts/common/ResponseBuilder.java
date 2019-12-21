@@ -1,11 +1,12 @@
 package com.jk.mahjongaccounts.common;
 
-import java.io.Serializable;
+import lombok.Data;
 
 /**
  * @author jk
  */
-public class ResponseBuilder implements Serializable {
+@Data
+public class ResponseBuilder{
 
     /**
      * 返回码  0：成功  -1：失败
@@ -22,19 +23,11 @@ public class ResponseBuilder implements Serializable {
         this.message = description;
     }
 
-    public static String builderSuccess(){
-        return new ResponseBuilder(0,"success").toString();
+    public static ResponseBuilder builderSuccess(){
+        return new ResponseBuilder(0,"success");
     }
 
-    public static String builderFail(String message){
-        return  new ResponseBuilder(-1,message).toString();
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                '}';
+    public static ResponseBuilder builderFail(String message){
+        return  new ResponseBuilder(-1,message);
     }
 }
