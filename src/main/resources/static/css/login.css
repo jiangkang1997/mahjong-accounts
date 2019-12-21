@@ -1,4 +1,3 @@
-@import url(http://fonts.useso.com/css?family=Source+Sans+Pro:200,300);
 * {
     box-sizing: border-box;
     margin: 0;
@@ -13,30 +12,31 @@ body {
 body ::-webkit-input-placeholder {
     /* WebKit browsers */
     font-family: 'Source Sans Pro', sans-serif;
-    color: white;
+    color: blanchedalmond;
     font-weight: 300;
 }
 body :-moz-placeholder {
     /* Mozilla Firefox 4 to 18 */
     font-family: 'Source Sans Pro', sans-serif;
-    color: white;
+    color: beige;
     opacity: 1;
     font-weight: 300;
 }
 body ::-moz-placeholder {
     /* Mozilla Firefox 19+ */
     font-family: 'Source Sans Pro', sans-serif;
-    color: white;
+    color: bisque;
     opacity: 1;
     font-weight: 300;
 }
 body :-ms-input-placeholder {
     /* Internet Explorer 10+ */
     font-family: 'Source Sans Pro', sans-serif;
-    color: white;
+    color: burlywood;
     font-weight: 300;
 }
 .wrapper {
+    text-align:center;
     background: #50a3a2;
     background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
     background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
@@ -56,27 +56,9 @@ body :-ms-input-placeholder {
     -ms-transform: translateY(85px);
     transform: translateY(85px);
 }
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 80px 0;
-    height: 400px;
-    text-align: center;
-}
-.container h1 {
-    font-size: 40px;
-    -webkit-transition-duration: 1s;
-    transition-duration: 1s;
-    -webkit-transition-timing-function: ease-in-put;
-    transition-timing-function: ease-in-put;
-    font-weight: 200;
-}
-.form {
-    padding: 20px 0;
-    position: relative;
-    z-index: 2;
-}
-.form input {
+
+
+.wrapper input {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -95,31 +77,30 @@ body :-ms-input-placeholder {
     transition-duration: 0.25s;
     font-weight: 300;
 }
-.form input:hover {
+.wrapper input:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
-.form input:focus {
+.wrapper input:focus {
     background-color: white;
     width: 300px;
     color: #53e3a6;
 }
-.form button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+.wrapper button {
+    margin-right: 48px;
+    text-align: center;
     outline: 0;
     background-color: white;
     border: 0;
     padding: 10px 15px;
     color: #53e3a6;
     border-radius: 3px;
-    width: 250px;
+    width: 100px;
     cursor: pointer;
     font-size: 18px;
     -webkit-transition-duration: 0.25s;
     transition-duration: 0.25s;
 }
-.form button:hover {
+.wrapper button:hover {
     background-color: #f5f7f9;
 }
 .bg-bubbles {

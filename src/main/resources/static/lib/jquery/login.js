@@ -6,10 +6,10 @@ function ToLogin() {
         success:function(){
             var loginFrameJS ="";
             loginFrameJS+="<h1>Welcome</h1>"+
-            "<input type='text' id='userName' name='userName' placeholder='Username'><br>"+
-                "<input type='password' id='password' name='password' placeholder='Password'><br>"+
-                "<button type='submit' onclick='Login()' id='login'>Login</button>"+
-                "<button type='submit' onclick='toRegister()' id='toRegister'>toRegister</button>";
+            "<input type='text' id='userName' name='userName' placeholder='请输入用户名'><br>"+
+                "<input type='password' id='password' name='password' placeholder='请输入密码'><br>"+
+                "<button onclick='Login()' id='login'>登录</button>"+
+                "<button  onclick='toRegister()' id='toRegister'>注册</button>";
 
             $("#loginFrame").html(loginFrameJS);
         },
@@ -23,16 +23,30 @@ function ToLogin() {
 
 function checkUser() {
     var userName = $('#userName').val();
-    if (userName = "undefined" || userName == null || userName == "") {
+    var password = $('#password').val();
+    var rePassword = $('#rePassword').val();
+    var jud = /[@#\$%\^&\*]+/;
+    if (userName == undefined || userName == null || userName == "") {
         alert("用户名不能为空");
-    }else if (userName.length>11){
-        alert("用户名过长");
+    }
+    if (userName.length < 4 || userName.length > 16) {
+        alert("用户名位必须4-16字符");
+    }
+    if (jud.test(userName)) {
+        alert("不得含有特殊字符");
+    }
+    if (password.length < 6 || password.length > 16){
+        alert("密码必须6-16字符");
+    }
+    if (password !=rePassword){
+        alert("两次密码不一致！");
     }
     return false;
 }
 
 function Login() {
     //if(!checkUser()) return;
+    console.log("13123");
     $.ajax({
         type:"POST",
         url:"/user/login",
@@ -65,11 +79,11 @@ function toRegister() {
         success:function(){
             var loginFrameJS ="";
             loginFrameJS+="<h1>Welcome</h1>"+
-                "<input type='text' id='userName' name='userName' placeholder='Username'><br>"+
-                "<input type='password' id='password' name='password' placeholder='Password'><br>"+
-                "<input type='password' id='rePassword' name='rePassword' placeholder='Password'><br>"+
-                "<button type='submit' onclick='ToLogin()' id='login'>ToLogin</button>"+
-                "<button type='submit' onclick='IsUserExist()' id='toRegister'>Register</button>";
+                "<input type='text' id='userName' name='userName' placeholder='请输入用户名'><br>"+
+                "<input type='password' id='password' name='password' placeholder='请输入密码'><br>"+
+                "<input type='password' id='rePassword' name='rePassword' placeholder='请确认密码'><br>"+
+                "<button  onclick='ToLogin()' id='login'>登录</button>"+
+                "<button  onclick='IsUserExist()' id='toRegister'>注册</button>";
 
             $("#loginFrame").html(loginFrameJS);
         },
@@ -91,17 +105,12 @@ function IsUserExist() {
         },
         dataType : 'json',
         success:function(data){
-            console.log(data)
-            if(data.code == -1){
-                var r=confirm("用户名不能为空");
-                if (r==true){
-                    ToRegister();
-                }
+            if(data.data){
+                var r=confirm("用户名已存在");
                 ToRegister();
-            } else if (data.code == 0 || data.data) {
-                Register();
+            }else{
+               Register();
             }
-            Register();
         },
         error:function(xhr,status,error){
             console.log(xhr);
@@ -121,11 +130,13 @@ function Register() {
         },
         dataType : 'json',
         success:function(data){
-            if (data.code == 0) {
-                window.location.href = 'index';
-            }else{
-                alert(data.message);
-            }
+           if (data.code == -1 && data.message != "success"){
+               var r=confirm("用户名已存在");
+               ToRegister();
+           }else if (data.code == 0 && data.message == "success"){
+               var r=confirm("注册成功");
+               window.location.href = 'index';
+           }
         },
         error:function(xhr,status,error){
             console.log(xhr);
