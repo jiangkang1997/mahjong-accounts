@@ -1,4 +1,4 @@
-package com.jk.mahjongaccounts.controller;
+package com.jk.mahjongaccounts.common;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,18 +11,6 @@ import java.io.IOException;
  */
 @Slf4j
 public class WebSocketHandler {
-
-
-    /**
-     * 根据key和用户名生成一个key值，简单实现下
-     *
-     * @param key
-     * @param name
-     * @return
-     */
-    public static String createKey(String key, String name) {
-        return key + "@" + name;
-    }
 
     /**
      * 给指定用户发送信息

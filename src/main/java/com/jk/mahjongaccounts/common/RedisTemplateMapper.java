@@ -1,7 +1,7 @@
 package com.jk.mahjongaccounts.common;
 
 import com.alibaba.fastjson.JSON;
-import com.jk.mahjongaccounts.model.Table;
+import com.jk.mahjongaccounts.model.RelateTableUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,34 +16,33 @@ import java.util.List;
 public class RedisTemplateMapper {
 
     private final StringRedisTemplate redisTemplate;
-    private final String KEY_NAME = "roomHash";
 
     @Autowired
     public RedisTemplateMapper(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
-    public void push(Table table) throws Exception {
-        String val = beanToString(table);
+    public <T> void push(String key,String field,T t) throws Exception {
+        String val = beanToString(t);
         if (val == null || val.length() <= 0) {
             throw new BusinessException("不可传空值");
         }
-        redisTemplate.opsForHash().put(KEY_NAME,table.getTableId(),val);
+        redisTemplate.opsForHash().put(key,field,val);
     }
 
 
-    public List<Table> getAll() throws Exception {
-        List<Object> tables = redisTemplate.opsForHash().values(KEY_NAME);
-        List<Table> result = new ArrayList<>();
+    public List<RelateTableUser> getAll() throws Exception {
+        List<Object> tables = redisTemplate.opsForHash().values(RedisKey.TABLE_USER_HASH);
+        List<RelateTableUser> result = new ArrayList<>();
         for (Object table : tables) {
-            result.add(stringToBean((String) table,Table.class));
+            result.add(stringToBean((String) table, RelateTableUser.class));
         }
         return result;
     }
 
-    public Table getByTableId(String tableId) throws Exception{
-        String table = (String) redisTemplate.opsForHash().get(KEY_NAME,tableId);
-        return stringToBean(table,Table.class);
+    public <T> T getByTableId(String key, String tableId,Class<T> clazz) throws Exception{
+        String table = (String) redisTemplate.opsForHash().get(key,tableId);
+        return stringToBean(table, clazz);
     }
 
 

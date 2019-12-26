@@ -4,8 +4,11 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author jk
+ */
 @Data
-public class Table {
+public class RelateTableUser {
 
     private String tableId;
 
@@ -13,7 +16,7 @@ public class Table {
 
     private List<User> users;
 
-    public Table(){
+    public RelateTableUser(){
         this.tableId = System.currentTimeMillis()+"";
     }
 }

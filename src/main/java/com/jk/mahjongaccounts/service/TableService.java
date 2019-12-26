@@ -1,6 +1,6 @@
 package com.jk.mahjongaccounts.service;
 
-import com.jk.mahjongaccounts.model.Table;
+import com.jk.mahjongaccounts.model.RelateTableUser;
 import com.jk.mahjongaccounts.model.User;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface TableService {
      * @param user
      * @throws Exception
      */
-    void creatTable(User user) throws Exception;
+    String creatTable(User user) throws Exception;
 
     /**
      * 退出房间
@@ -35,5 +35,5 @@ public interface TableService {
     /**
      * 获取所有房间
      */
-    List<Table> getAll() throws Exception;
+    List<RelateTableUser> getAll() throws Exception;
 }

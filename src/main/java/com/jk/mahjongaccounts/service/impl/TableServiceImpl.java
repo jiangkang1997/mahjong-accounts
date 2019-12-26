@@ -1,8 +1,9 @@
 package com.jk.mahjongaccounts.service.impl;
 
 import com.jk.mahjongaccounts.common.BusinessException;
+import com.jk.mahjongaccounts.common.RedisKey;
 import com.jk.mahjongaccounts.common.RedisTemplateMapper;
-import com.jk.mahjongaccounts.model.Table;
+import com.jk.mahjongaccounts.model.RelateTableUser;
 import com.jk.mahjongaccounts.model.User;
 import com.jk.mahjongaccounts.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,44 +27,45 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public void creatTable(User user) throws Exception {
-        Table table = new Table();
+    public String creatTable(User user) throws Exception {
+        RelateTableUser relateTableUser = new RelateTableUser();
         List<User> users = new ArrayList<>();
         users.add(user);
-        table.setTableName(user.getUserName()+"创建的房间");
-        table.setUsers(users);
-        redisTemplateMapper.push(table);
+        relateTableUser.setTableName(user.getUserName()+"创建的房间");
+        relateTableUser.setUsers(users);
+        redisTemplateMapper.push(RedisKey.TABLE_USER_HASH, relateTableUser.getTableId(), relateTableUser);
+        return relateTableUser.getTableId();
     }
 
     @Override
     public void exit(User user,String tableId) throws Exception {
-        Table table = redisTemplateMapper.getByTableId(tableId);
-        if(table == null){
+        RelateTableUser relateTableUser = redisTemplateMapper.getByTableId(RedisKey.TABLE_USER_HASH,tableId,RelateTableUser.class);
+        if(relateTableUser == null){
             throw new BusinessException("该局游戏已解散");
         }
-        List<User> users = table.getUsers();
+        List<User> users = relateTableUser.getUsers();
         users.remove(user);
-        table.setUsers(users);
-        redisTemplateMapper.push(table);
+        relateTableUser.setUsers(users);
+        redisTemplateMapper.push(RedisKey.TABLE_USER_HASH, relateTableUser.getTableId(), relateTableUser);
     }
 
     @Override
     public synchronized void join(User user,String tableId) throws Exception {
-        Table table = redisTemplateMapper.getByTableId(tableId);
-        if(table == null){
+        RelateTableUser relateTableUser = redisTemplateMapper.getByTableId(RedisKey.TABLE_USER_HASH,tableId,RelateTableUser.class);
+        if(relateTableUser == null){
             throw new BusinessException("该局游戏已解散");
         }
-        List<User> users = table.getUsers();
+        List<User> users = relateTableUser.getUsers();
         if(users.size() >= TABLE_MAX_SIZE){
             throw new BusinessException("本桌人数已满");
         }
         users.add(user);
-        table.setUsers(users);
-        redisTemplateMapper.push(table);
+        relateTableUser.setUsers(users);
+        redisTemplateMapper.push(RedisKey.TABLE_USER_HASH, relateTableUser.getTableId(), relateTableUser);
     }
 
     @Override
-    public List<Table> getAll() throws Exception {
+    public List<RelateTableUser> getAll() throws Exception {
         return redisTemplateMapper.getAll();
     }
 }

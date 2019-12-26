@@ -3,11 +3,10 @@ package com.jk.mahjongaccounts.controller;
 import com.jk.mahjongaccounts.common.BusinessException;
 import com.jk.mahjongaccounts.common.ResponseBuilder;
 import com.jk.mahjongaccounts.common.RoleCheck;
-import com.jk.mahjongaccounts.model.Table;
+import com.jk.mahjongaccounts.model.RelateTableUser;
 import com.jk.mahjongaccounts.model.User;
 import com.jk.mahjongaccounts.service.TableService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.builder.BuilderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,16 +33,17 @@ public class TableController {
     @RoleCheck
     @RequestMapping("/creat")
     public ResponseBuilder creatTable(HttpSession session){
+        String tableId;
         try {
             User user = (User) session.getAttribute("user");
-            tableService.creatTable(user);
+            tableId = tableService.creatTable(user);
         }catch (BusinessException e){
             return ResponseBuilder.builderFail(e.getMessage());
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return ResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess();
+        return ResponseBuilder.builderSuccess(tableId);
     }
 
     @RoleCheck
@@ -86,7 +86,7 @@ public class TableController {
     @RequestMapping("/getAll")
     public ResponseBuilder getAll(){
         try {
-            List<Table> all = tableService.getAll();
+            List<RelateTableUser> all = tableService.getAll();
             return ResponseBuilder.builderSuccess(all);
         } catch (Exception e) {
             log.error(e.getMessage(),e);

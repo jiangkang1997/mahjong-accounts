@@ -1,7 +1,8 @@
 package com.jk.mahjongaccounts.controller;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -11,7 +12,12 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import com.jk.mahjongaccounts.common.RedisKey;
+import com.jk.mahjongaccounts.common.RedisTemplateMapper;
+import com.jk.mahjongaccounts.common.WebSocketHandler;
+import com.jk.mahjongaccounts.model.RelateTableSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -21,28 +27,41 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ServerEndpoint("/net/websocket/{key}/{name}")//表明这是一个websocket服务的端点
+@ServerEndpoint("/net/websocket/{tableId}/{userId}")
 public class WebSocketEndPoint {
 
-    private Integer count = 0;
+    @Autowired
+    RedisTemplateMapper redisTemplateMapper;
 
 
     @OnOpen
-    public void onOpen(@PathParam("key") String key, @PathParam("name") String name,  Session session){
-        log.info("有新的连接：{}", session);
-        WebSocketHandler.sendMessage(session, "服务器给你发送了一条消息"+new Date().getTime());
-        log.info("在线人数：{}",++count);
+    public void onOpen(@PathParam("tableId") String tableId, @PathParam("userId") String userId,  Session session){
+        log.info("{}加入了{}房间",userId,tableId);
+        RelateTableSession relateTableSession;
+        try {
+            relateTableSession = redisTemplateMapper.getByTableId(RedisKey.TABLE_SESSION_HASH, tableId, RelateTableSession.class);
+            if(relateTableSession  == null){
+                relateTableSession = new RelateTableSession(tableId);
+            }
+            List<Session> sessions = new ArrayList<>();
+            sessions.add(session);
+            relateTableSession.setSessions(sessions);
+            redisTemplateMapper.push(RedisKey.TABLE_SESSION_HASH,tableId,relateTableSession);
+        } catch (Exception e) {
+            WebSocketHandler.sendMessage(session,"系统错误");
+            e.printStackTrace();
+        }
     }
 
     @OnMessage
-    public void onMessage(String message){
+    public void onMessage(String message,Session session){
         log.info("有新消息： {}", message);
+        System.out.println(session);
     }
 
     @OnClose
     public void onClose(@PathParam("key") String key, @PathParam("name") String name,Session session){
         log.info("连接关闭： {}", session);
-        log.info("在线人数：{}",--count);
     }
 
     @OnError
