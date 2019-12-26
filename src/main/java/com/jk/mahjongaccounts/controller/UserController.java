@@ -2,6 +2,7 @@ package com.jk.mahjongaccounts.controller;
 
 import com.jk.mahjongaccounts.common.BusinessException;
 import com.jk.mahjongaccounts.common.ResponseBuilder;
+import com.jk.mahjongaccounts.model.User;
 import com.jk.mahjongaccounts.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author jk
@@ -26,19 +29,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseBuilder login(String userName, String password){
+    public ResponseBuilder login(String userName, String password, HttpSession session){
         if(StringUtils.isEmpty(userName)  || StringUtils.isEmpty(password)){
             return ResponseBuilder.builderFail("账号或密码不能为空");
         }
+        User user;
         try {
-            userService.login(userName, password);
+            user = userService.login(userName, password);
+            session.setAttribute("user",user);
         }catch (BusinessException e){
             return ResponseBuilder.builderFail(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(),e);
             return ResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess();
+        return ResponseBuilder.builderSuccess(user);
     }
 
     @PostMapping("/register")
