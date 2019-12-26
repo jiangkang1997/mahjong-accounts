@@ -15,12 +15,8 @@ import java.util.List;
 @Component
 public class RedisTemplateMapper {
 
-    private final StringRedisTemplate redisTemplate;
-
     @Autowired
-    public RedisTemplateMapper(StringRedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+    public StringRedisTemplate redisTemplate;
 
     public <T> void push(String key,String field,T t) throws Exception {
         String val = beanToString(t);
@@ -51,7 +47,6 @@ public class RedisTemplateMapper {
         if (value == null || value.length() <= 0 || clazz == null) {
             return null;
         }
-
         if (clazz == int.class || clazz == Integer.class) {
             return (T) Integer.valueOf(value);
         } else if (clazz == long.class || clazz == Long.class) {

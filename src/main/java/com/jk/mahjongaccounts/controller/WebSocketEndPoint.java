@@ -3,6 +3,8 @@ package com.jk.mahjongaccounts.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -12,55 +14,58 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import com.jk.mahjongaccounts.common.RedisKey;
-import com.jk.mahjongaccounts.common.RedisTemplateMapper;
-import com.jk.mahjongaccounts.common.WebSocketHandler;
+import com.jk.mahjongaccounts.common.*;
 import com.jk.mahjongaccounts.model.RelateTableSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
 
 /**
  * @author jk
  */
 @Slf4j
-@Component
 @ServerEndpoint("/net/websocket/{tableId}/{userId}")
+@Component
 public class WebSocketEndPoint {
 
-    @Autowired
-    RedisTemplateMapper redisTemplateMapper;
+    private Map<String,RelateTableSession> sessionMap;
+
+    public WebSocketEndPoint() {
+        sessionMap = new ConcurrentHashMap<>();
+    }
 
 
     @OnOpen
-    public void onOpen(@PathParam("tableId") String tableId, @PathParam("userId") String userId,  Session session){
+    public void onOpen(@PathParam("tableId") String tableId, @PathParam("userId") String userId, Session session){
         log.info("{}加入了{}房间",userId,tableId);
         RelateTableSession relateTableSession;
         try {
-            relateTableSession = redisTemplateMapper.getByTableId(RedisKey.TABLE_SESSION_HASH, tableId, RelateTableSession.class);
+            relateTableSession = sessionMap.get(tableId);
             if(relateTableSession  == null){
                 relateTableSession = new RelateTableSession(tableId);
+                System.out.println(session.getId());
             }
             List<Session> sessions = new ArrayList<>();
             sessions.add(session);
             relateTableSession.setSessions(sessions);
-            redisTemplateMapper.push(RedisKey.TABLE_SESSION_HASH,tableId,relateTableSession);
+            sessionMap.put(tableId,relateTableSession);
         } catch (Exception e) {
-            WebSocketHandler.sendMessage(session,"系统错误");
-            e.printStackTrace();
+            try {
+                WebSocketHandler.sendMessage(session,"系统错误");
+                session.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            log.error(e.getMessage(),e);
         }
     }
 
     @OnMessage
     public void onMessage(String message,Session session){
         log.info("有新消息： {}", message);
-        System.out.println(session);
     }
 
     @OnClose
-    public void onClose(@PathParam("key") String key, @PathParam("name") String name,Session session){
+    public void onClose(@PathParam("key") String key, @PathParam("name") String name, Session session){
         log.info("连接关闭： {}", session);
     }
 
