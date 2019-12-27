@@ -26,8 +26,7 @@ public class RedisTemplateMapper {
         redisTemplate.opsForHash().put(key,field,val);
     }
 
-
-    public List<RelateTableUser> getAll() throws Exception {
+    public List<RelateTableUser> getAllRelateTableUser() throws Exception {
         List<Object> tables = redisTemplate.opsForHash().values(RedisKey.TABLE_USER_HASH);
         List<RelateTableUser> result = new ArrayList<>();
         for (Object table : tables) {
@@ -39,6 +38,27 @@ public class RedisTemplateMapper {
     public <T> T getByTableId(String key, String tableId,Class<T> clazz) throws Exception{
         String table = (String) redisTemplate.opsForHash().get(key,tableId);
         return stringToBean(table, clazz);
+    }
+
+    public void del(String key,String field){
+        redisTemplate.opsForHash().delete(key,field);
+    }
+
+    public void del(String key){
+        redisTemplate.delete(key);
+    }
+
+    public void set(String key,String value){
+        redisTemplate.opsForValue().set(key,value);
+    }
+
+    /**
+     * 获取用户所在桌（掉线重连）
+     * @param key
+     * @return
+     */
+    public String getTableId(String key){
+        return redisTemplate.opsForValue().get(key);
     }
 
 

@@ -66,6 +66,30 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public List<RelateTableUser> getAll() throws Exception {
-        return redisTemplateMapper.getAll();
+        return redisTemplateMapper.getAllRelateTableUser();
     }
+
+    @Override
+    public String reconnect(Integer userId) throws Exception{
+        String tableId =  redisTemplateMapper.getTableId(String.valueOf(userId));
+        if(tableId == null){
+            throw new BusinessException("无法连接到该房间");
+        }
+        //需要判断房间是否存在
+        RelateTableUser relateTableUser = redisTemplateMapper.getByTableId(RedisKey.TABLE_USER_HASH, tableId, RelateTableUser.class);
+        if(relateTableUser == null){
+            //将用户置为自由状态（非重连状态）
+            redisTemplateMapper.del(String.valueOf(userId));
+            throw new BusinessException("该房间已解散 无法连接");
+        }
+        return relateTableUser.getTableId();
+    }
+
+    @Override
+    public boolean isGaming(Integer userId) {
+        String tableId = redisTemplateMapper.getTableId(String.valueOf(userId));
+        return tableId != null;
+    }
+
+
 }

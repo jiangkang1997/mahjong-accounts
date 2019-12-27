@@ -36,4 +36,20 @@ public interface TableService {
      * 获取所有房间
      */
     List<RelateTableUser> getAll() throws Exception;
+
+    /**
+     * 重新连接
+     * @param userId
+     * @return 房间号
+     * @throws Exception
+     */
+    String reconnect(Integer userId) throws Exception;
+
+    /**
+     * 判断用户是否在游戏中（掉线重连）
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    boolean isGaming(Integer userId);
 }

@@ -5,6 +5,6 @@ package com.jk.mahjongaccounts.common;
  * @author jk
  */
 public class RedisKey {
-    public static final String TABLE_USER_HASH = "TABLE_USER_HASH";
-    public static final String TABLE_SESSION_HASH = "TABLE_SESSION_HASH";
+    public static final String TABLE_USER_HASH = "0";
+    public static final String TABLE_SESSION_HASH = "1";
 }
