@@ -2,11 +2,14 @@ package com.jk.mahjongaccounts.mapper;
 
 import com.jk.mahjongaccounts.common.RedisKey;
 import com.jk.mahjongaccounts.common.RedisUtil;
+import com.jk.mahjongaccounts.model.AccountInfo;
 import com.jk.mahjongaccounts.model.RelateTableSession;
 import com.jk.mahjongaccounts.model.RelateTableUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,6 +72,30 @@ public class RedisTemplateMapper {
 
     public Set<String> getAllTable(){
         return redisUtil.keys(RedisKey.TABLE_USER);
+    }
+
+    public void setAccountInfo(AccountInfo accountInfo){
+        String key = RedisKey.ACCOUNT_INFO + accountInfo.getTableId() + "_" + accountInfo.getProviderId();
+        redisUtil.set(key,accountInfo,20L);
+    }
+
+    public AccountInfo getAccountInfo(String tableId,String userId){
+        String key = RedisKey.ACCOUNT_INFO + tableId + "_" + userId;
+        return redisUtil.get(key,AccountInfo.class);
+    }
+
+    public List<AccountInfo> getAccountInfos(String tableId){
+        Set<String> keys = redisUtil.keys(RedisKey.ACCOUNT_INFO + tableId + "_*");
+        List<AccountInfo> result = new ArrayList<>();
+        for (String key : keys) {
+            result.add(redisUtil.get(key, AccountInfo.class));
+        }
+        return result;
+    }
+
+    public Integer getAccountInfoSize(String tableId){
+        Set<String> keys = redisUtil.keys(RedisKey.ACCOUNT_INFO + tableId + "_*");
+        return keys.size();
     }
 
 

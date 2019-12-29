@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author jk
@@ -22,20 +21,11 @@ public class RedisUtil {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 
-    public <T> boolean set(String key ,T value){
-        try {
-            //任意类型转换成String
-            String val = beanToString(value);
-            if(val==null||val.length()<=0){
-                return false;
-            }
-            stringRedisTemplate.opsForValue().set(key,val);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+    public <T> void set(String key ,T value){
+        //任意类型转换成String
+        String val = beanToString(value);
+        stringRedisTemplate.opsForValue().set(key,val);
     }
-
 
     public <T> T get(String key,Class<T> clazz){
         try {
@@ -52,6 +42,12 @@ public class RedisUtil {
 
     public Set<String> keys(String prefix){
         return stringRedisTemplate.keys(prefix + "*");
+    }
+
+    public <T> void set(String key,T value,Long time){
+        //任意类型转换成String
+        String val = beanToString(value);
+        stringRedisTemplate.opsForValue().set(key,val,time, TimeUnit.MINUTES);
     }
 
     @SuppressWarnings("unchecked")
