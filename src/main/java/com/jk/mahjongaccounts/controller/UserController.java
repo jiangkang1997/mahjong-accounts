@@ -1,7 +1,7 @@
 package com.jk.mahjongaccounts.controller;
 
 import com.jk.mahjongaccounts.common.BusinessException;
-import com.jk.mahjongaccounts.common.ResponseBuilder;
+import com.jk.mahjongaccounts.common.HttpResponseBuilder;
 import com.jk.mahjongaccounts.model.User;
 import com.jk.mahjongaccounts.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,51 +29,51 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseBuilder login(String userName, String password, HttpSession session){
+    public HttpResponseBuilder login(String userName, String password, HttpSession session){
         if(StringUtils.isEmpty(userName)  || StringUtils.isEmpty(password)){
-            return ResponseBuilder.builderFail("账号或密码不能为空");
+            return HttpResponseBuilder.builderFail("账号或密码不能为空");
         }
         User user;
         try {
             user = userService.login(userName, password);
             session.setAttribute("user",user);
         }catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess(user);
+        return HttpResponseBuilder.builderSuccess(user);
     }
 
     @PostMapping("/register")
-    public ResponseBuilder register(String userName, String password){
+    public HttpResponseBuilder register(String userName, String password){
         if(StringUtils.isEmpty(userName)  || StringUtils.isEmpty(password)){
-            return ResponseBuilder.builderFail("账号或密码不能为空");
+            return HttpResponseBuilder.builderFail("账号或密码不能为空");
         }
         try {
             userService.register(userName, password);
         }catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess();
+        return HttpResponseBuilder.builderSuccess();
     }
 
     @PostMapping("/isUserExist")
-    public ResponseBuilder isUserExist(String userName){
+    public HttpResponseBuilder isUserExist(String userName){
         if(StringUtils.isEmpty(userName)){
-            return ResponseBuilder.builderFail("参数不能为空");
+            return HttpResponseBuilder.builderFail("参数不能为空");
         }
         Boolean exist;
         try {
             exist = userService.isUserExist(userName);
         }catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess(exist);
+        return HttpResponseBuilder.builderSuccess(exist);
     }
 }

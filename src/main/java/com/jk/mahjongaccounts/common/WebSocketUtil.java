@@ -1,19 +1,20 @@
 package com.jk.mahjongaccounts.common;
 
+import com.jk.mahjongaccounts.mapper.RedisTemplateMapper;
 import com.jk.mahjongaccounts.model.RelateTableSession;
 import lombok.extern.slf4j.Slf4j;
+import com.alibaba.fastjson.JSON;
 
 import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author jk
  */
 @Slf4j
-public class WebSocketHandler {
+public class WebSocketUtil {
 
     private static RedisTemplateMapper redisTemplateMapper;
 
@@ -27,7 +28,7 @@ public class WebSocketHandler {
      * @param session
      * @param msg
      */
-    public static void sendMessage(Session session, String msg) {
+    public static void sendMessage(Session session, WebsocketResponseBuilder msg) {
         if (session == null){
             return;
         }
@@ -36,7 +37,7 @@ public class WebSocketHandler {
             return;
         }
         try {
-            basic.sendText(msg);
+            basic.sendText(JSON.toJSONString(msg));
         } catch (IOException e) {
             log.error("sendText Exception:", e);
         }
@@ -47,7 +48,7 @@ public class WebSocketHandler {
      * @param sessionIds
      * @param message
      */
-    public static void sendMessage(List<String> sessionIds,String message){
+    public static void sendMessage(List<String> sessionIds, WebsocketResponseBuilder message){
         if(sessionIds.size() != 0){
             for (String sessionId : sessionIds) {
                 Session session = SessionMap.get(sessionId);
@@ -63,8 +64,8 @@ public class WebSocketHandler {
      * @param tableId
      * @param message
      */
-    public static void sendMessageForTable(String tableId,String message) throws Exception {
-        RelateTableSession relateTableSession = redisTemplateMapper.getByTableId(RedisKey.TABLE_SESSION_HASH, tableId, RelateTableSession.class);
+    public static void sendMessageForTable(String tableId, WebsocketResponseBuilder message){
+        RelateTableSession relateTableSession = redisTemplateMapper.getRelateTableSession(tableId);
         if(relateTableSession != null){
             List<String> sessionIds = relateTableSession.getSessionIds();
             if(sessionIds != null && sessionIds.size() != 0){

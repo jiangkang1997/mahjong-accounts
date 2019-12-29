@@ -1,6 +1,6 @@
 package com.jk.mahjongaccounts.controller;
 
-import com.jk.mahjongaccounts.common.ResponseBuilder;
+import com.jk.mahjongaccounts.common.HttpResponseBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/account")
 public class AccountController {
 
-    public ResponseBuilder account(){
-        return ResponseBuilder.builderSuccess();
+    public HttpResponseBuilder account(){
+        return HttpResponseBuilder.builderSuccess();
     }
 }

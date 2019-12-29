@@ -1,7 +1,7 @@
 package com.jk.mahjongaccounts.controller;
 
 import com.jk.mahjongaccounts.common.BusinessException;
-import com.jk.mahjongaccounts.common.ResponseBuilder;
+import com.jk.mahjongaccounts.common.HttpResponseBuilder;
 import com.jk.mahjongaccounts.common.RoleCheck;
 import com.jk.mahjongaccounts.model.RelateTableUser;
 import com.jk.mahjongaccounts.model.User;
@@ -37,18 +37,18 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/creat")
-    public ResponseBuilder creatTable(HttpSession session){
+    public HttpResponseBuilder creatTable(HttpSession session){
         String tableId;
         try {
             User user = (User) session.getAttribute("user");
             tableId = tableService.creatTable(user);
         }catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         }catch (Exception e){
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess(tableId);
+        return HttpResponseBuilder.builderSuccess(tableId);
     }
 
     /**
@@ -59,20 +59,20 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/exit")
-    public ResponseBuilder exit(String tableId,HttpSession session){
+    public HttpResponseBuilder exit(String tableId, HttpSession session){
         if(StringUtils.isEmpty(tableId)){
-            return ResponseBuilder.builderFail("参数不可为空");
+            return HttpResponseBuilder.builderFail("参数不可为空");
         }
         User user = (User) session.getAttribute("user");
         try {
             tableService.exit(user,tableId);
         } catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         }catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess();
+        return HttpResponseBuilder.builderSuccess();
     }
 
     /**
@@ -83,20 +83,20 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/join")
-    public ResponseBuilder join(String tableId,HttpSession session){
+    public HttpResponseBuilder join(String tableId, HttpSession session){
         if(StringUtils.isEmpty(tableId)){
-            return ResponseBuilder.builderFail("参数不可为空");
+            return HttpResponseBuilder.builderFail("参数不可为空");
         }
         User user = (User) session.getAttribute("user");
         try {
             tableService.join(user,tableId);
         } catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         }catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
-        return ResponseBuilder.builderSuccess();
+        return HttpResponseBuilder.builderSuccess();
     }
 
     /**
@@ -105,13 +105,13 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/getAll")
-    public ResponseBuilder getAll(){
+    public HttpResponseBuilder getAll(){
         try {
             List<RelateTableUser> all = tableService.getAll();
-            return ResponseBuilder.builderSuccess(all);
+            return HttpResponseBuilder.builderSuccess(all);
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
     }
 
@@ -121,15 +121,15 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/reconnect")
-    public ResponseBuilder reconnect(Integer userId){
+    public HttpResponseBuilder reconnect(Integer userId){
         try {
             String tableId = tableService.reconnect(userId);
-            return ResponseBuilder.builderSuccess(tableId);
+            return HttpResponseBuilder.builderSuccess(tableId);
         }catch (BusinessException e){
-            return ResponseBuilder.builderFail(e.getMessage());
+            return HttpResponseBuilder.builderFail(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
     }
 
@@ -140,13 +140,13 @@ public class TableController {
      */
     @RoleCheck
     @RequestMapping("/isGaming")
-    public ResponseBuilder isGaming(Integer userId){
+    public HttpResponseBuilder isGaming(Integer userId){
         try {
             boolean result = tableService.isGaming(userId);
-            return ResponseBuilder.builderSuccess(result);
+            return HttpResponseBuilder.builderSuccess(result);
         }catch (Exception e) {
             log.error(e.getMessage(),e);
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
     }
 }

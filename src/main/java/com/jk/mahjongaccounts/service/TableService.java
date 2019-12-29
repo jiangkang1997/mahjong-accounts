@@ -35,7 +35,7 @@ public interface TableService {
     /**
      * 获取所有房间
      */
-    List<RelateTableUser> getAll() throws Exception;
+    List<RelateTableUser> getAll();
 
     /**
      * 重新连接

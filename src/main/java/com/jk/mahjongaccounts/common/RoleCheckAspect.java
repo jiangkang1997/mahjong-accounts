@@ -27,12 +27,12 @@ public class RoleCheckAspect {
     @Around("annotationPointCut()")
     public Object doAround(ProceedingJoinPoint joinPoint) {
         if(!validate()){
-            return ResponseBuilder.builderFail("登录状态失效，请重新登录");
+            return HttpResponseBuilder.builderFail("登录状态失效，请重新登录");
         }
         try {
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            return ResponseBuilder.builderFail("系统错误");
+            return HttpResponseBuilder.builderFail("系统错误");
         }
     }
 
