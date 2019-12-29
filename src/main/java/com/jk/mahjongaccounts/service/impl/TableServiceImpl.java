@@ -70,7 +70,7 @@ public class TableServiceImpl implements TableService {
         Set<String> allTable = redisTemplateMapper.getAllTable();
         List<RelateTableUser> result = new ArrayList<>();
         for (String s : allTable) {
-            result.add(redisTemplateMapper.getRelateTableUser(s.substring(15)));
+            result.add(redisTemplateMapper.getRelateTableUser(s.substring(RedisKey.TABLE_USER.length())));
         }
         return result;
     }
