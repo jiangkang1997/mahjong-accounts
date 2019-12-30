@@ -93,6 +93,13 @@ public class RedisTemplateMapper {
         return result;
     }
 
+    public void delAccountInfos(String tableId){
+        Set<String> keys = redisUtil.keys(RedisKey.ACCOUNT_INFO + tableId + "_*");
+        for (String key : keys) {
+            redisUtil.del(key);
+        }
+    }
+
     public Integer getAccountInfoSize(String tableId){
         Set<String> keys = redisUtil.keys(RedisKey.ACCOUNT_INFO + tableId + "_*");
         return keys.size();

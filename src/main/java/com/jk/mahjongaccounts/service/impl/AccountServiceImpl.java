@@ -1,12 +1,16 @@
 package com.jk.mahjongaccounts.service.impl;
 
 import com.jk.mahjongaccounts.common.BusinessException;
+import com.jk.mahjongaccounts.common.WebSocketUtil;
+import com.jk.mahjongaccounts.common.WebsocketResponseBuilder;
 import com.jk.mahjongaccounts.mapper.RedisTemplateMapper;
 import com.jk.mahjongaccounts.model.AccountInfo;
 import com.jk.mahjongaccounts.model.Gang;
 import com.jk.mahjongaccounts.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.Map;
  * @author jk
  */
 @Service
+@EnableTransactionManagement
 public class AccountServiceImpl implements AccountService {
 
     private final RedisTemplateMapper redisTemplateMapper;
@@ -26,19 +31,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Integer account(AccountInfo accountInfo) {
+    public void submit(AccountInfo accountInfo){
+        Integer num =  redisTemplateMapper.getAccountInfoSize(accountInfo.getTableId());
+        //都已提交的情况下，忽略重复提交，因为已经进入计算状态
+        if(num == 4){
+            return;
+        }
         redisTemplateMapper.setAccountInfo(accountInfo);
-        return redisTemplateMapper.getAccountInfoSize(accountInfo.getTableId());
+        num =  redisTemplateMapper.getAccountInfoSize(accountInfo.getTableId());
+        if(num == 4){
+            //提交完成，自动进入计算状态
+            try{
+                calculation(accountInfo.getTableId());
+            }catch (Exception e){
+                //计算过程出现不可控异常，删除所有提交，并给出警告
+                redisTemplateMapper.delAccountInfos(accountInfo.getTableId());
+                WebSocketUtil.sendMessageForTable(accountInfo.getTableId(), WebsocketResponseBuilder.builderFail("计算异常，请所有人重新提交"));
+            }
+        }else if(num > 4){
+            //数据异常情况,需要删掉所有提交，并给出警告
+            redisTemplateMapper.delAccountInfos(accountInfo.getTableId());
+            WebSocketUtil.sendMessageForTable(accountInfo.getTableId(), WebsocketResponseBuilder.builderFail("数据异常，请所有人重新提交"));
+        }
     }
 
-    @Override
-    public void calculation(String tableId) throws Exception {
+
+    private void calculation(String tableId) throws Exception{
         List<AccountInfo> accountInfos = redisTemplateMapper.getAccountInfos(tableId);
         if(accountInfos.size() != 4){
-            throw new BusinessException("还有人未提交，无法继续");
+            //为了避免数据不完整 或数据异常导致的计算异常，需删除所有提交，并给出警告
+            redisTemplateMapper.delAccountInfos(tableId);
+            WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail("数据异常，请所有人重新提交"));
         }
-        //先检查四人输入信息的合法性
-        checkLegality(accountInfos);
+        try {
+            //先检查四人输入信息的合法性
+            checkLegality(accountInfos);
+            //算账 通过合法性检查后，不会出现账不平的情况
+            //账单持久化
+            //给出
+        }catch (BusinessException e){
+            WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail(e.getMessage()));
+        }
     }
 
 

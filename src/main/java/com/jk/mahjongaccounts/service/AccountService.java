@@ -10,15 +10,7 @@ public interface AccountService {
     /**
      * 提交记账信息
      * @param accountInfo
-     * @return 该桌已经提交的人数
      */
-    Integer account(AccountInfo accountInfo);
+    void submit(AccountInfo accountInfo);
 
-    /**
-     * 计算本桌的帐
-     * @param tableId
-     * @throws Exception
-     * @return
-     */
-    void calculation(String tableId) throws Exception;
 }

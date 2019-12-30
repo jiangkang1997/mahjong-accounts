@@ -1,7 +1,6 @@
 package com.jk.mahjongaccounts.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -42,7 +41,7 @@ public class WebSocketEndPoint {
         } catch (Exception e) {
             try {
                 log.error(e.getMessage(), e);
-                WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderFail("系统错误"));
+                WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderFail("系统错误，连接已断开"));
                 session.close();
             } catch (IOException ex) {
                 log.error(ex.getMessage(), ex);
