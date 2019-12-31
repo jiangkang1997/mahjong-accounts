@@ -34,4 +34,14 @@ public class Bill implements Serializable {
      * 本局收益
      */
     private Integer profit;
+
+    public Bill(){
+        this.gameId = String.valueOf(System.currentTimeMillis());
+    }
+
+    public Bill(Integer userId, String tableId){
+        this.gameId = String.valueOf(System.currentTimeMillis());
+        this.userId = userId;
+        this.tableId = tableId;
+    }
 }

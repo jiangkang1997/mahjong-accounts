@@ -3,8 +3,10 @@ package com.jk.mahjongaccounts.service.impl;
 import com.jk.mahjongaccounts.common.BusinessException;
 import com.jk.mahjongaccounts.common.WebSocketUtil;
 import com.jk.mahjongaccounts.common.WebsocketResponseBuilder;
+import com.jk.mahjongaccounts.mapper.BillMapper;
 import com.jk.mahjongaccounts.mapper.RedisTemplateMapper;
 import com.jk.mahjongaccounts.model.AccountInfo;
+import com.jk.mahjongaccounts.model.Bill;
 import com.jk.mahjongaccounts.model.Gang;
 import com.jk.mahjongaccounts.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author jk
@@ -24,10 +24,12 @@ import java.util.Map;
 public class AccountServiceImpl implements AccountService {
 
     private final RedisTemplateMapper redisTemplateMapper;
+    private final BillMapper billMapper;
 
     @Autowired
-    public AccountServiceImpl(RedisTemplateMapper redisTemplateMapper) {
+    public AccountServiceImpl(RedisTemplateMapper redisTemplateMapper, BillMapper billMapper) {
         this.redisTemplateMapper = redisTemplateMapper;
+        this.billMapper = billMapper;
     }
 
     @Override
@@ -56,21 +58,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    private void calculation(String tableId) throws Exception{
+    @Transactional(rollbackFor = Exception.class)
+    void calculation(String tableId) throws Exception{
         List<AccountInfo> accountInfos = redisTemplateMapper.getAccountInfos(tableId);
         if(accountInfos.size() != 4){
             //为了避免数据不完整 或数据异常导致的计算异常，需删除所有提交，并给出警告
             redisTemplateMapper.delAccountInfos(tableId);
             WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail("数据异常，请所有人重新提交"));
+            return;
         }
         try {
             //先检查四人输入信息的合法性
             checkLegality(accountInfos);
-            //算账 通过合法性检查后，不会出现账不平的情况
+            //生成账单 通过合法性检查后，不会出现账不平的情况
+            List<Bill> bills = creatBill(accountInfos);
             //账单持久化
+            billMapper.insertBatch(bills);
             //给出
         }catch (BusinessException e){
             WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail(e.getMessage()));
+
         }
     }
 
@@ -120,5 +127,26 @@ public class AccountServiceImpl implements AccountService {
             }
 
         }
+    }
+
+    private List<Bill> creatBill(List<AccountInfo> accountInfos){
+        //对局战况汇总
+        String winner = accountInfos.get(0).getWinnerId();
+        Map<String,Integer> redouble = accountInfos.get(0).getRedouble();
+
+
+
+        Map<Integer,Bill> billMap = new HashMap<>(8);
+        for (AccountInfo accountInfo : accountInfos) {
+            Bill bill = new Bill(Integer.parseInt(accountInfo.getProviderId()),accountInfo.getTableId());
+            billMap.put(bill.getUserId(),bill);
+        }
+
+        for (AccountInfo accountInfo : accountInfos) {
+            //先算胡牌
+
+        }
+        return null;
+
     }
 }

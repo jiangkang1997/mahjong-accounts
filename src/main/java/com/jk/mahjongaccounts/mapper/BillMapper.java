@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author jk
  */
@@ -27,6 +29,13 @@ public interface BillMapper {
      * @return
      */
     int insert(@Param("bill") Bill bill);
+
+    /**
+     * 插入
+     * @param bill
+     * @return
+     */
+    int insertBatch(@Param("bills") List<Bill> bill);
 
 
     /**
