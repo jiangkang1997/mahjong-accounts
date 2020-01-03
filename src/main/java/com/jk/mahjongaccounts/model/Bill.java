@@ -33,7 +33,7 @@ public class Bill implements Serializable {
     /**
      * 本局收益
      */
-    private Integer profit;
+    private Double profit;
 
     public Bill(){
         this.gameId = String.valueOf(System.currentTimeMillis());

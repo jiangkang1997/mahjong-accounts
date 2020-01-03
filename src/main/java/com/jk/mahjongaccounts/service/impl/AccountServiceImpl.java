@@ -5,6 +5,7 @@ import com.jk.mahjongaccounts.common.WebSocketUtil;
 import com.jk.mahjongaccounts.common.WebsocketResponseBuilder;
 import com.jk.mahjongaccounts.mapper.BillMapper;
 import com.jk.mahjongaccounts.mapper.RedisTemplateMapper;
+import com.jk.mahjongaccounts.mapper.UserMapper;
 import com.jk.mahjongaccounts.model.AccountInfo;
 import com.jk.mahjongaccounts.model.Bill;
 import com.jk.mahjongaccounts.model.Gang;
@@ -25,11 +26,14 @@ public class AccountServiceImpl implements AccountService {
 
     private final RedisTemplateMapper redisTemplateMapper;
     private final BillMapper billMapper;
+    private final UserMapper userMapper;
+    private final Double baseScore = 1d;
 
     @Autowired
-    public AccountServiceImpl(RedisTemplateMapper redisTemplateMapper, BillMapper billMapper) {
+    public AccountServiceImpl(RedisTemplateMapper redisTemplateMapper, BillMapper billMapper, UserMapper userMapper) {
         this.redisTemplateMapper = redisTemplateMapper;
         this.billMapper = billMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -74,14 +78,18 @@ public class AccountServiceImpl implements AccountService {
             List<Bill> bills = creatBill(accountInfos);
             //账单持久化
             billMapper.insertBatch(bills);
-            //给出
+            //给出账单
+            sendBill(bills);
         }catch (BusinessException e){
             WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail(e.getMessage()));
-
         }
     }
 
-
+    /**
+     * 检查主逻辑
+     * @param accountInfos
+     * @throws Exception
+     */
     private void checkLegality(List<AccountInfo> accountInfos) throws Exception{
         //检查胡牌的合法性 保证四人输入的winner是同一个人
         //检查开杠的合法性，保证四人输入的开杠情况一致
@@ -129,24 +137,83 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     * 算账主逻辑 根据输入，给出每人账单
+     * @param accountInfos
+     * @return
+     */
     private List<Bill> creatBill(List<AccountInfo> accountInfos){
-        //对局战况汇总
-        String winner = accountInfos.get(0).getWinnerId();
-        Map<String,Integer> redouble = accountInfos.get(0).getRedouble();
-
-
-
-        Map<Integer,Bill> billMap = new HashMap<>(8);
+        Map<String,Bill> billMap = new HashMap<>(8);
         for (AccountInfo accountInfo : accountInfos) {
             Bill bill = new Bill(Integer.parseInt(accountInfo.getProviderId()),accountInfo.getTableId());
-            billMap.put(bill.getUserId(),bill);
+            billMap.put(String.valueOf(bill.getUserId()),bill);
         }
-
+        //开杠情况
+        Map<String,Integer> redouble = accountInfos.get(0).getRedouble();
+        //先算胡牌
+        String winner = accountInfos.get(0).getWinnerId();
+        int count = 0;
         for (AccountInfo accountInfo : accountInfos) {
-            //先算胡牌
-
+            if(!accountInfo.getProviderId().equals(winner)){
+                Bill bill = billMap.get(accountInfo.getProviderId());
+                double cost = baseScore
+                        * Math.pow(2,redouble.get(accountInfo.getProviderId()))
+                        * Math.pow(2,redouble.get(winner));
+                count += cost;
+                bill.setProfit(bill.getProfit() + (-1 * cost) );
+            }
+        }
+        Bill winnerBill = billMap.get(winner);
+        winnerBill.setProfit(winnerBill.getProfit() + count);
+        //明杠和暗杠
+        for (AccountInfo accountInfo : accountInfos) {
+            for (Gang gang : accountInfo.getGangs()) {
+                //明杠
+                if(gang.isPublic()){
+                    Bill gangWinnerBill = billMap.get(gang.getWinner());
+                    Bill gangLoserBill = billMap.get(gang.getLoser());
+                    double cost = baseScore * 1/2
+                            * Math.pow(2,redouble.get(gang.getWinner()))
+                            * Math.pow(2,redouble.get(gang.getLoser()));
+                    gangWinnerBill.setProfit(gangWinnerBill.getProfit() + cost);
+                    gangLoserBill.setProfit(gangLoserBill.getProfit() - cost);
+                }
+                //暗杠
+                else {
+                    Bill gangBill = billMap.get(gang.getWinner());
+                    int gangCount  = 0;
+                    for (AccountInfo info : accountInfos) {
+                        if(!info.getProviderId().equals(gang.getWinner())){
+                            Bill bill = billMap.get(info.getProviderId());
+                            double cost = baseScore
+                                    * Math.pow(2,redouble.get(info.getProviderId()))
+                                    * Math.pow(2,redouble.get(gang.getWinner()));
+                            bill.setProfit(bill.getProfit() + (-1 * cost) );
+                            gangCount += cost;
+                        }
+                    }
+                    gangBill.setProfit(gangBill.getProfit() + gangCount);
+                }
+            }
         }
         return null;
+    }
 
+    /**
+     * 给所有人发送核对账单
+     * @param bills
+     * @throws Exception
+     */
+    private void sendBill(List<Bill> bills) throws Exception {
+        if(bills == null || bills.size() != 4){
+            throw new Exception("系统错误：数据异常");
+        }
+        StringBuilder message = new StringBuilder();
+        for (Bill bill : bills) {
+            String userName = userMapper.getByUserId(bill.getUserId()).getUserName();
+            message.append(userName).append(" : ").append(bill.getProfit()).append("元").append("\n");
+        }
+        String tableId = bills.get(0).getTableId();
+        WebSocketUtil.sendMessageForTable(tableId,WebsocketResponseBuilder.builderSuccess(message.toString()));
     }
 }

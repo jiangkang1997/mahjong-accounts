@@ -11,7 +11,7 @@
     <result column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="table_id" property="tableId" jdbcType="VARCHAR" />
     <result column="game_id" property="gameId" jdbcType="VARCHAR" />
-    <result column="profit" property="profit" jdbcType="INTEGER" />
+    <result column="profit" property="profit" jdbcType="DOUBLE" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -46,7 +46,7 @@
     insert into bill (bill_id, user_id, table_id, 
       game_id, profit)
     values (#{billId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{tableId,jdbcType=VARCHAR}, 
-      #{gameId,jdbcType=VARCHAR}, #{profit,jdbcType=INTEGER})
+      #{gameId,jdbcType=VARCHAR}, #{profit,jdbcType=DOUBLE})
   </insert>
 
     <insert id="insertBatch" parameterType="java.util.List">
@@ -67,7 +67,7 @@
     set user_id = #{userId,jdbcType=INTEGER},
       table_id = #{tableId,jdbcType=VARCHAR},
       game_id = #{gameId,jdbcType=VARCHAR},
-      profit = #{profit,jdbcType=INTEGER}
+      profit = #{profit,jdbcType=DOUBLE}
     where bill_id = #{billId,jdbcType=INTEGER}
   </update>
 
