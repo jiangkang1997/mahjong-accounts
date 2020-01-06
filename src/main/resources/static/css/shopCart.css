@@ -4,8 +4,7 @@
     font-family: 微软雅黑;
 }
 .main{
-    width: 1190px;
-
+    width: 500px;
     margin: 0 auto;
 }
 .main .goods_type{
@@ -50,7 +49,7 @@
     padding-left: 30px;
 }
 .single_goods{
-    width: 1190px;
+    width: 500px;
     height: 120px;
     border: solid 1px #909090;
     margin: 5px 0;
@@ -80,17 +79,15 @@
 }
 .single_goods .goods_name{
     float: left;
-    width: 226px;
+    width: 150px;
     height: 40px;
-    margin: 40px 10px;
+    margin: 40px 25px;
 }
 .single_goods .uit_price,.single_goods .total_price,.single_goods .operate{
     width: 130px;
-    height: 120px;
-    line-height: 120px;
-    float: right;
-    box-sizing: border-box;
-    padding-left: 27px;
+    height: 40px;
+    float: left;
+    margin: 40px 10px;
 }
 .single_goods .goods_num{
     width: 130px;

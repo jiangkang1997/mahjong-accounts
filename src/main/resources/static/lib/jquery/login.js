@@ -61,7 +61,7 @@ function Login() {
         dataType : 'json',
         success:function(data){
             if (data.code == 0) {
-                window.location.href = 'index';
+                window.location.href = '/page/home';
             }else{
                 var r=confirm(data.message);
                 if (r==true){
