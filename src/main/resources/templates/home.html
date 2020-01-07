@@ -17,51 +17,94 @@
 
 <body>
 
-<script>
-    let goodsDiv = "<div class=\"single_goods\">\n" +
-        "            <div class=\"goods_name\"></div>\n" +
-        "            <div class=\"operate\">\n" +
-        "                <form name=\"\" action=\"/store/shoppingcart.do\" method=\"GET\">\n" +
-        "                    <input type=\"submit\" value=\"删除\" name=\"delete\">\n" +
-        "                    <input type=\"text\" value=\"delete\" name=\"action\" STYLE=\"visibility: hidden; width: 0;height: 0\">\n" +
-        "                    <input type=\"text\" value=\"<%= shoppingcart.getShoppingcart_id()%>\" class=\"goods_id_input\"\n" +
-        "                           name=\"shoppingcartId\" STYLE=\"visibility: hidden; width: 0;height: 0\">\n" +
-        "                </form>\n" +
-        "            </div>\n" +
-        "            <div class=\"total_price\">\n" +
-        "                ￥<span class=\"goods_all_price\">\n" +
-        "                    <%= Integer.parseInt(goods.getGoods_price())* Integer.parseInt(shoppingcart.getNumber())%>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "            <div class=\"goods_num\">\n" +
-        "                <div>\n" +
-        "                    <p class=\"down\">-</p>\n" +
-        "                    <input type=\"text\" value=\"<%=shoppingcart.getNumber() %>\" class=\"goodsNum\">\n" +
-        "                    <p class=\"up\">+</p>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <div class=\"uit_price\">\n" +
-        "                ￥<span class=\"uitPrice\"><%= goods.getGoods_price() %></span>\n" +
-        "            </div>\n" +
-        "        </div>"
-</script>
 
 <div class="main">
 
     <div class="main_content" id="main_content">
-        <div class="single_goods">
-            <div class="goods_name">蒋康创建的房间</div>
-            <div class="total_price">
-                人数 ： 1/4
-            </div>
-            <div class="operate">
-                <button class="layui-btn" >加入房间</button>
-            </div>
-        </div>
+
 
     </div>
 
-
 </div>
+
+<script>
+
+    let layer;
+    let user;
+
+    layui.use('layer', function () {
+        layer = layui.layer;
+    });
+
+    window.onload=function(){
+        //获取用户信息
+        $.ajax({
+            type: "POST",
+            url: "/user/getUser",
+            async: false,
+            dataType : "json",
+            success : function(data) {
+                if (data.code == 0){
+                    user = data.data;
+                }else{
+                    layer.alert("页面初始化失败:"+data.message,{icon: 2});
+                }
+            }
+        });
+        //初始化页面信息
+        $.ajax({
+            type: "POST",
+            url: "/table/getAll",
+            async: false,
+            dataType : "json",// 后台处理后返回的数据格式
+            success : function(data) {// ajax请求成功后触发的方法
+                if (data.code == 0){
+
+                    let tables = data.data;
+                    for(let i =0;i<tables.length;i++){
+                        appendHtml(tables[i]);
+                    }
+                }else{
+                    layer.alert("页面初始化失败:"+data.message,{icon: 2});
+                }
+            }
+        });
+    };
+
+    function appendHtml(table) {
+        let html = "<div class=\"single_goods\">\n" +
+            "            <div class=\"goods_name\">" + table.tableName + "</div>\n" +
+            "            <div class=\"total_price\">\n" +
+            "                人数 ： "+ table.users.length +"/4\n" +
+            "            </div>\n" +
+            "            <div class=\"operate\">" +
+            "                <button class=\"layui-btn\" onclick=\"join(" + table.tableId + ")\" >加入房间</button>" +
+            "            </div>\n" +
+            "        </div>"
+        document.getElementById("main_content").innerHTML += html;
+    }
+    
+    function join(tableId) {
+        $.ajax({
+            type: "POST",
+            url: "/table/join",
+            async: false,
+            data: {
+                tableId: tableId,
+            },
+            dataType : "json",
+            success : function(data) {
+                if (data.code == 0){
+                    window.location.href = '/page/index';
+                }else{
+                    layer.alert("加入房间失败:"+data.message,{icon: 2});
+                }
+            }
+        });
+    }
+
+
+</script>
+
 </body>
 </html>

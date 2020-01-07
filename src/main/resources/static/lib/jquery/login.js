@@ -134,7 +134,7 @@ function Register() {
                ToRegister();
            }else if (data.code == 0 && data.message == "success"){
                var r=confirm("注册成功");
-               window.location.href = 'index';
+               window.location.href = '/page/login';
            }
         },
         error:function(xhr,status,error){

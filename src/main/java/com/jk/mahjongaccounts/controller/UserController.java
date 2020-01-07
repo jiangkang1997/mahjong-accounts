@@ -2,6 +2,7 @@ package com.jk.mahjongaccounts.controller;
 
 import com.jk.mahjongaccounts.common.BusinessException;
 import com.jk.mahjongaccounts.common.HttpResponseBuilder;
+import com.jk.mahjongaccounts.common.RoleCheck;
 import com.jk.mahjongaccounts.model.User;
 import com.jk.mahjongaccounts.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -75,5 +76,19 @@ public class UserController {
             return HttpResponseBuilder.builderFail("系统错误");
         }
         return HttpResponseBuilder.builderSuccess(exist);
+    }
+
+    @RoleCheck
+    @PostMapping("/getUser")
+    public HttpResponseBuilder getUser(HttpSession session){
+        try{
+            User user = (User) session.getAttribute("user");
+            return HttpResponseBuilder.builderSuccess(user);
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return HttpResponseBuilder.builderFail("系统错误");
+        }
+
+
     }
 }
