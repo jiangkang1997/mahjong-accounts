@@ -25,4 +25,9 @@ public class PageController {
     public String index(){
         return "index";
     }
+
+    @GetMapping("/table")
+    public String table(){
+        return "table";
+    }
 }

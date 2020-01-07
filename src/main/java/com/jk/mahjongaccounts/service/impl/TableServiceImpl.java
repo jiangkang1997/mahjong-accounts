@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,10 +29,9 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public synchronized String creatTable(User user) throws Exception {
+    public synchronized String creatTable(User user){
         RelateTableUser relateTableUser = new RelateTableUser();
-        List<User> users = new ArrayList<>();
-        users.add(user);
+        Set<User> users = new HashSet<>();
         relateTableUser.setTableName(user.getUserName()+"创建的房间");
         relateTableUser.setUsers(users);
         redisTemplateMapper.setRelateTableUser(relateTableUser);
@@ -44,7 +44,7 @@ public class TableServiceImpl implements TableService {
         if(relateTableUser == null){
             throw new BusinessException("该局游戏已解散");
         }
-        List<User> users = relateTableUser.getUsers();
+        Set<User> users = relateTableUser.getUsers();
         users.remove(user);
         relateTableUser.setUsers(users);
         redisTemplateMapper.setRelateTableUser(relateTableUser);
@@ -56,13 +56,14 @@ public class TableServiceImpl implements TableService {
         if(relateTableUser == null){
             throw new BusinessException("该局游戏已解散");
         }
-        List<User> users = relateTableUser.getUsers();
+        Set<User> users = relateTableUser.getUsers();
         if(users.size() >= TABLE_MAX_SIZE){
             throw new BusinessException("本桌人数已满");
         }
         users.add(user);
         relateTableUser.setUsers(users);
         redisTemplateMapper.setRelateTableUser(relateTableUser);
+        redisTemplateMapper.setUserTable(String.valueOf(user.getUserId()), tableId);
     }
 
     @Override
@@ -95,6 +96,11 @@ public class TableServiceImpl implements TableService {
     public boolean isGaming(Integer userId) {
         String tableId = redisTemplateMapper.getUserTable(String.valueOf(userId));
         return tableId != null;
+    }
+
+    @Override
+    public String getTableId(Integer userId) {
+        return redisTemplateMapper.getUserTable(String.valueOf(userId));
     }
 
 }

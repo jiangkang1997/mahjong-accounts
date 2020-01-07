@@ -3,6 +3,7 @@ package com.jk.mahjongaccounts.model;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author jk
@@ -14,7 +15,7 @@ public class RelateTableUser {
 
     private String tableName;
 
-    private List<User> users;
+    private Set<User> users;
 
     public RelateTableUser(){
         this.tableId = System.currentTimeMillis()+"";

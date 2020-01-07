@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @author jk
  */
 @Slf4j
-@ServerEndpoint("/net/websocket/{tableId}/{userId}/{userName}")
+@ServerEndpoint("/websocket/{tableId}/{userId}/{userName}")
 @Component
 public class WebSocketEndPoint {
 
@@ -33,7 +33,7 @@ public class WebSocketEndPoint {
     @OnOpen
     public void onOpen(@PathParam("tableId") String tableId,
                        @PathParam("userId") Integer userId,
-                       @PathParam("userName") Integer userName,
+                       @PathParam("userName") String userName,
                        Session session) {
         log.info("{}加入了{}房间", userId, userName);
         try {

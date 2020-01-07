@@ -9,6 +9,7 @@ import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author jk
@@ -48,7 +49,7 @@ public class WebSocketUtil {
      * @param sessionIds
      * @param message
      */
-    public static void sendMessage(List<String> sessionIds, WebsocketResponseBuilder message){
+    public static void sendMessage(Set<String> sessionIds, WebsocketResponseBuilder message){
         if(sessionIds.size() != 0){
             for (String sessionId : sessionIds) {
                 Session session = SessionMap.get(sessionId);
@@ -67,7 +68,7 @@ public class WebSocketUtil {
     public static void sendMessageForTable(String tableId, WebsocketResponseBuilder message){
         RelateTableSession relateTableSession = redisTemplateMapper.getRelateTableSession(tableId);
         if(relateTableSession != null){
-            List<String> sessionIds = relateTableSession.getSessionIds();
+            Set<String> sessionIds = relateTableSession.getSessionIds();
             if(sessionIds != null && sessionIds.size() != 0){
                 sendMessage(sessionIds,message);
             }

@@ -15,7 +15,7 @@ public interface WebSocketService {
      * @param session
      * @throws Exception
      */
-    void onOpen(String tableId, Integer userId, Integer userName, Session session) throws Exception;
+    void onOpen(String tableId, Integer userId, String userName, Session session) throws Exception;
 
     /**
      * 收到新消息

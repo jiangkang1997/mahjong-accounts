@@ -42,8 +42,6 @@ public class TableController {
         try {
             User user = (User) session.getAttribute("user");
             tableId = tableService.creatTable(user);
-        }catch (BusinessException e){
-            return HttpResponseBuilder.builderFail(e.getMessage());
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return HttpResponseBuilder.builderFail("系统错误");
@@ -143,6 +141,23 @@ public class TableController {
     public HttpResponseBuilder isGaming(Integer userId){
         try {
             boolean result = tableService.isGaming(userId);
+            return HttpResponseBuilder.builderSuccess(result);
+        }catch (Exception e) {
+            log.error(e.getMessage(),e);
+            return HttpResponseBuilder.builderFail("系统错误");
+        }
+    }
+
+    /**
+     * 获取用户所在桌id
+     * @param userId
+     * @return
+     */
+    @RoleCheck
+    @RequestMapping("/getTableId")
+    public HttpResponseBuilder getTableId(Integer userId){
+        try {
+            String result = tableService.getTableId(userId);
             return HttpResponseBuilder.builderSuccess(result);
         }catch (Exception e) {
             log.error(e.getMessage(),e);

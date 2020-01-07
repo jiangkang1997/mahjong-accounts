@@ -3,6 +3,7 @@ package com.jk.mahjongaccounts.model;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author jk
@@ -14,7 +15,7 @@ public class RelateTableSession {
 
     private String tableName;
 
-    private List<String> sessionIds;
+    private Set<String> sessionIds;
 
     public RelateTableSession(){
         this.tableId = System.currentTimeMillis()+"";

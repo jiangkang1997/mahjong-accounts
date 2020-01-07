@@ -44,4 +44,9 @@ public class User implements Serializable {
         User user = (User) o;
         return getUserId().equals(user.getUserId());
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
 }

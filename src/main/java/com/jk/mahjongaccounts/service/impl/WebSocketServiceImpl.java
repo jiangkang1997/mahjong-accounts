@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author jk
@@ -25,13 +25,13 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     @Override
-    public void onOpen(String tableId, Integer userId, Integer userName, Session session) throws Exception {
+    public void onOpen(String tableId, Integer userId, String userName, Session session) throws Exception {
         RelateTableSession relateTableSession;
-        List<String> sessionIds;
+        Set<String> sessionIds;
         relateTableSession = redisTemplateMapper.getRelateTableSession(tableId);
         if (relateTableSession == null) {
             relateTableSession = new RelateTableSession(tableId);
-            sessionIds = new ArrayList<>();
+            sessionIds = new HashSet<>();
         } else {
             sessionIds = relateTableSession.getSessionIds();
             if (sessionIds.size() >= 4) {
@@ -48,8 +48,6 @@ public class WebSocketServiceImpl implements WebSocketService {
         redisTemplateMapper.setRelateTableSession(relateTableSession);
         //存放session实体，由于session无法序列化，因此单独存放
         SessionMap.put(session.getId(), session);
-        //存放 用户与桌的关系 用于掉线重连
-        redisTemplateMapper.setUserTable(String.valueOf(userId), tableId);
         WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderSuccess("您已成功链接房间"));
     }
 
@@ -66,7 +64,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         SessionMap.remove(session.getId());
         RelateTableSession relateTableSession = redisTemplateMapper.getRelateTableSession(tableId);
         if (relateTableSession != null) {
-            List<String> sessionIds = relateTableSession.getSessionIds();
+            Set<String> sessionIds = relateTableSession.getSessionIds();
             if (sessionIds != null) {
                 sessionIds.remove(session.getId());
                 //进入满员房间导致的强制断开，不通知。

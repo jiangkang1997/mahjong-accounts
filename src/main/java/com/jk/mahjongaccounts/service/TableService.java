@@ -13,9 +13,9 @@ public interface TableService {
     /**
      * 创建房间
      * @param user
-     * @throws Exception
+     * @return 创建的桌id
      */
-    String creatTable(User user) throws Exception;
+    String creatTable(User user);
 
     /**
      * 退出房间
@@ -52,4 +52,11 @@ public interface TableService {
      * @throws Exception
      */
     boolean isGaming(Integer userId);
+
+    /**
+     * 获取用户所在桌id
+     * @param userId
+     * @return
+     */
+    String getTableId(Integer userId);
 }
