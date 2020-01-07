@@ -8,3 +8,9 @@
     width: 500px;
     margin: 0 auto;
 }
+.main .winner{
+    width: inherit;
+    height: 50px;
+    line-height: 50px;
+    list-style: none;
+}
