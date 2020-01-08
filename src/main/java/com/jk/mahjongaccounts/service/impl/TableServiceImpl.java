@@ -57,10 +57,10 @@ public class TableServiceImpl implements TableService {
             throw new BusinessException("该局游戏已解散");
         }
         Set<User> users = relateTableUser.getUsers();
-        if(users.size() >= TABLE_MAX_SIZE){
+        users.add(user);
+        if(users.size() > TABLE_MAX_SIZE){
             throw new BusinessException("本桌人数已满");
         }
-        users.add(user);
         relateTableUser.setUsers(users);
         redisTemplateMapper.setRelateTableUser(relateTableUser);
         redisTemplateMapper.setUserTable(String.valueOf(user.getUserId()), tableId);

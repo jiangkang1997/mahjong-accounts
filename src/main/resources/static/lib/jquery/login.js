@@ -34,8 +34,8 @@ function checkUser() {
     if (userName == undefined || userName == null || userName == "") {
         alert("用户名不能为空");
     }else
-    if (userName.length < 4 || userName.length > 16) {
-        alert("用户名位必须4-16字符");
+    if (userName.length < 2 || userName.length > 16) {
+        alert("用户名位必须2-16字符");
     }else
     if (jud.test(userName)) {
         alert("不得含有特殊字符");

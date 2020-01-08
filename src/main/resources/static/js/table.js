@@ -101,6 +101,16 @@ function initPlayerArray() {
     playerSet.forEach(function (element, sameElement, set) {
         playerArray.push(element);
     });
+    let redouble_name_labels = $("label.redouble_content_name_label");
+    let private_gang_name_labels = $("label.private_gang_winner_name_label");
+    let public_gang_winner_name_selects = $("select.public_gang_winner_name_select");
+    let public_gang_loser_name_selects = $("select.public_gang_loser_name_select");
+    for(let i=0;i<playerArray.length;i++){
+        $(redouble_name_labels[i]).html(playerArray[i]);
+        $(private_gang_name_labels[i]).html(playerArray[i]);
+        $(public_gang_winner_name_selects).append("<option>"+playerArray[i]+"</option>");
+        $(public_gang_loser_name_selects).append("<option>"+playerArray[i]+"</option>");
+    }
 }
 
 function onWinnerChange() {
@@ -111,7 +121,7 @@ function onWinnerChange() {
     document.getElementById("winner").setAttribute("value",playerArray[winnerIndex]);
 }
 
-function onRedoubleSub(that) {
+function onSub(that) {
     let numLabel = $(that).next();
     let num = numLabel.attr("value");
     num--;
@@ -121,7 +131,7 @@ function onRedoubleSub(that) {
     $(numLabel).attr("value",num);
 }
 
-function onRedoubleAdd(that) {
+function onAdd(that) {
     let numLabel = $(that).prev();
     let num = numLabel.attr("value");
     num++;
@@ -129,4 +139,24 @@ function onRedoubleAdd(that) {
         num = 4;
     }
     $(numLabel).attr("value",num);
+}
+
+function onPublicGangAdd() {
+    let html = "<div class=\"public_gang_content_div\">\n" +
+        "            <div class=\"public_gang_winner_name_div\">\n" +
+        "                <select class=\"public_gang_winner_name_select\"></select>\n" +
+        "            </div>\n" +
+        "            <div style=\"width: 80px;height: 50px;float: left\">\n" +
+        "                <label style=\"font-size: 30px\">杠了</label>\n" +
+        "            </div>\n" +
+        "            <div class=\"public_gang_loser_name_div\">\n" +
+        "                <select class=\"public_gang_loser_name_select\" style=\"height: 50px;width: 75px\"></select>\n" +
+        "            </div>\n" +
+        "        </div>"
+    document.getElementById("public_gang_contents").innerHTML += html;
+    initPlayerArray();
+}
+
+function commit() {
+    console.log("提交了");
 }
