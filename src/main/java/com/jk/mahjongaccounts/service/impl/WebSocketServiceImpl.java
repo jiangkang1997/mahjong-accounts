@@ -57,7 +57,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     @Override
-    public void onClose(String tableId, Integer userId, Integer userName, Session session) throws Exception {
+    public void onClose(String tableId, Integer userId, String userName, Session session) throws Exception {
         session.close();
         //异常退出，删除 sessionMap，删除桌与session关系，
         // 保留桌与用户关系，使其处于重连状态

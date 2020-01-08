@@ -164,4 +164,21 @@ public class TableController {
             return HttpResponseBuilder.builderFail("系统错误");
         }
     }
+
+    /**
+     * 获取用户所在桌id
+     * @param tableId
+     * @return
+     */
+    @RoleCheck
+    @RequestMapping("/getPlayer")
+    public HttpResponseBuilder getPlayer(String tableId){
+        try {
+            List<String> result = tableService.getPlayer(tableId);
+            return HttpResponseBuilder.builderSuccess(result);
+        }catch (Exception e) {
+            log.error(e.getMessage(),e);
+            return HttpResponseBuilder.builderFail("系统错误");
+        }
+    }
 }

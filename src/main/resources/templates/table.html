@@ -7,82 +7,104 @@
     <link rel="stylesheet" href="../static/css/admin/admin.css" th:href="@{/css/admin/admin.css}" media="all">
     <link rel="stylesheet" th:href="@{/lib/layui/css/modules/layer/default/layer.css}" media="all">
     <link rel="stylesheet" href="../static/css/table.css" type="text/css" th:href="@{/css/table.css}">
+    <script src="../static/js/table.js" th:src="@{/js/table.js}"></script>
     <script src="../static/lib/layui/layui.js" th:src="@{/lib/layui/layui.js}"></script>
     <script src="../static/lib/jquery/jquery-3.2.1.min.js" th:src="@{/lib/jquery/jquery-3.2.1.min.js}"></script>
 </head>
 <body>
 
 <div class="main">
+
     <div class="winner">
-        <input type="text" id="winner" autocomplete="off" class="layui-input"
-               value="蒋康">
+        <div style="width: 80px;height: 50px;float: left">
+            <label style="float: left;font-size: 30px;padding-top: 5px;padding-left: 10px">赢家</label>
+        </div>
+        <input type="text" id="winner" class="winner_name" readonly="readonly"/>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                style="height: 50px;width: 100px;float: right"
+                onclick="onWinnerChange()">
+            <i class="layui-icon">&#xe602;</i>
+        </button>
     </div>
+
+    <div class="redouble">
+
+        <div class="redouble_title_div">
+            <label class="redouble_title_label">开杠数</label>
+        </div>
+
+        <div class="redouble_content_div">
+            <div class="redouble_content_name_div">
+                <label class="redouble_content_name_label">蒋康</label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" id="redouble_num0" class="redouble_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+
+        <div class="redouble_content_div">
+            <div class="redouble_content_name_div">
+                <label class="redouble_content_name_label">蒋康</label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" id="redouble_num1" class="redouble_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+
+        <div class="redouble_content_div">
+            <div class="redouble_content_name_div">
+                <label class="redouble_content_name_label">蒋康</label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" id="redouble_num2" class="redouble_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+
+        <div class="redouble_content_div">
+            <div class="redouble_content_name_div">
+                <label class="redouble_content_name_label">蒋康</label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" id="redouble_num3" class="redouble_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onRedoubleAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+
+    </div>
+
 </div>
 
 </body>
 
-<script>
-    let layer;
-    let user;
-    let tableId;
-
-    layui.use('layer', function () {
-        layer = layui.layer;
-    });
-
-    window.onload=function(){
-        //获取用户信息
-        $.ajax({
-            type: "POST",
-            url: "/user/getUser",
-            async: false,
-            dataType : "json",
-            success : function(data) {
-                if (data.code == 0){
-                    user = data.data;
-                }else{
-                    layer.alert("页面初始化失败:"+data.message,{icon: 2});
-                }
-            }
-        });
-
-        //获取桌id
-        $.ajax({
-            type: "POST",
-            url: "/table/getTableId",
-            async: false,
-            data:{
-                userId:user.userId
-            },
-            dataType : "json",
-            success : function(data) {
-                if (data.code == 0){
-                    tableId = data.data;
-                }else{
-                    layer.alert("页面初始化失败:"+data.message,{icon: 2});
-                }
-            }
-        });
-
-        //与服务器建立websocket连接
-        let url ="ws://127.0.0.1:8080/websocket/"+tableId+"/"+user.userId+"/"+user.userName;
-        let ws = new WebSocket(url);
-        ws.onopen = function () {
-            console.log("建立 websocket 连接...");
-        };
-        ws.onmessage = function(event){
-            let data = JSON.parse(event.data);
-            if(data.code == 0){
-                layer.msg(data.message,{icon: 6});
-            }else {
-                layer.alert(data.message,{icon: 2});
-            }
-        };
-        ws.onclose = function(){
-            $('#message_content').append('用户['+username+'] 已经离开聊天室!' + '\n');
-            console.log("关闭 websocket 连接...");
-        }
-
-    };
-</script>
 </html>

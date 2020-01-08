@@ -35,7 +35,7 @@ public class WebSocketEndPoint {
                        @PathParam("userId") Integer userId,
                        @PathParam("userName") String userName,
                        Session session) {
-        log.info("{}加入了{}房间", userId, userName);
+        log.info("{}加入了{}房间", userName, tableId);
         try {
            webSocketService.onOpen(tableId, userId, userName, session);
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class WebSocketEndPoint {
     @OnClose
     public void onClose(@PathParam("tableId") String tableId,
                         @PathParam("userId") Integer userId,
-                        @PathParam("userName") Integer userName,Session session) {
+                        @PathParam("userName") String userName,Session session) {
         log.info("连接关闭： {}", session);
         try {
             webSocketService.onClose(tableId, userId, userName, session);

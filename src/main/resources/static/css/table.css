@@ -9,8 +9,65 @@
     margin: 0 auto;
 }
 .main .winner{
-    width: inherit;
+    width: 500px;
     height: 50px;
-    line-height: 50px;
-    list-style: none;
+    margin: 5px 0;
+}
+.winner_name{
+    float: left;
+    width: 310px;
+    height: 45px;
+    font-size: 30px;
+    text-align:center;
+    color: red;
+}
+.main .redouble{
+    margin-top: 50px;
+    width: 500px;
+}
+.redouble_title_label{
+    width: 60px;
+    height: 40px;
+    font-size: 20px;
+    margin-left: 210px;
+}
+.redouble_title_div{
+    width: 500px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+.redouble_input{
+    float: left;
+    width: 310px;
+    height: 45px;
+    font-size: 30px;
+    text-align:center;
+    color: blue;
+    margin-bottom: 5px
+}
+.redouble_num{
+    float: left;
+    width: 150px;
+    height: 45px;
+    font-size: 30px;
+    text-align:center;
+    color: red;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.redouble_content_div{
+    width: 500px ;
+    height: 50px ;
+    margin-bottom: 5px
+}
+.redouble_content_name_div{
+    width: 90px;
+    height: 50px;
+    float: left
+}
+.redouble_content_name_label{
+    float: left;
+    font-size: 30px;
+    padding-top: 5px;
+    padding-left: 10px
 }

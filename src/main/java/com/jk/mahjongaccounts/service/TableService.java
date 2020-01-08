@@ -59,4 +59,11 @@ public interface TableService {
      * @return
      */
     String getTableId(Integer userId);
+
+    /**
+     * 获取该桌所有的玩家名
+     * @param tableId
+     * @return
+     */
+    List<String> getPlayer(String tableId);
 }

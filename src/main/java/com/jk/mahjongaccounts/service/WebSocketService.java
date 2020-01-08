@@ -32,7 +32,7 @@ public interface WebSocketService {
      * @param session
      * @throws Exception
      */
-    void onClose(String tableId, Integer userId, Integer userName,Session session) throws Exception;
+    void onClose(String tableId, Integer userId, String userName,Session session) throws Exception;
 
     /**
      * 连接错误
