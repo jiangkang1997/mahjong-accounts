@@ -174,7 +174,7 @@ public class TableController {
     @RequestMapping("/getPlayer")
     public HttpResponseBuilder getPlayer(String tableId){
         try {
-            List<String> result = tableService.getPlayer(tableId);
+            List<User> result = tableService.getPlayer(tableId);
             return HttpResponseBuilder.builderSuccess(result);
         }catch (Exception e) {
             log.error(e.getMessage(),e);

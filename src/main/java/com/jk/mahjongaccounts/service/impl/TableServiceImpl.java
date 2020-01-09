@@ -104,14 +104,10 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public List<String> getPlayer(String tableId) {
+    public List<User> getPlayer(String tableId) {
         RelateTableUser relateTableUser = redisTemplateMapper.getRelateTableUser(tableId);
         Set<User> users = relateTableUser.getUsers();
-        List<String> userNames = new ArrayList<>();
-        for (User user : users) {
-            userNames.add(user.getUserName());
-        }
-        return userNames;
+        return new ArrayList<>(users);
     }
 
 }

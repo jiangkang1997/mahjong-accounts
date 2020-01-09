@@ -46,7 +46,7 @@
         where user_name = #{userName}
     </select>
 
-    <select id="getByUserId" resultType="com.jk.mahjongaccounts.model.User">
+    <select id="getByUserId" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"/>
       from user

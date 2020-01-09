@@ -35,8 +35,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         } else {
             sessionIds = relateTableSession.getSessionIds();
             if (sessionIds.size() >= 4) {
-                WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderFail("该房间已满 三秒后断开链接"));
-                Thread.sleep(3000);
+                WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderFail("该房间已满 已断开连接"));
                 session.close();
                 return;
             }

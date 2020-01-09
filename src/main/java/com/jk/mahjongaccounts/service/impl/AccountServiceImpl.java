@@ -10,6 +10,7 @@ import com.jk.mahjongaccounts.model.AccountInfo;
 import com.jk.mahjongaccounts.model.Bill;
 import com.jk.mahjongaccounts.model.Gang;
 import com.jk.mahjongaccounts.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -21,6 +22,7 @@ import java.util.*;
  * @author jk
  */
 @Service
+@Slf4j
 @EnableTransactionManagement
 public class AccountServiceImpl implements AccountService {
 
@@ -51,6 +53,7 @@ public class AccountServiceImpl implements AccountService {
                 calculation(accountInfo.getTableId());
             }catch (Exception e){
                 //计算过程出现不可控异常，删除所有提交，并给出警告
+                log.error(e.getMessage(),e);
                 redisTemplateMapper.delAccountInfos(accountInfo.getTableId());
                 WebSocketUtil.sendMessageForTable(accountInfo.getTableId(), WebsocketResponseBuilder.builderFail("计算异常，请所有人重新提交"));
             }
@@ -80,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
             billMapper.insertBatch(bills);
             //给出账单
             sendBill(bills);
+            //todo:删除已提交的所有账单信息
         }catch (BusinessException e){
             WebSocketUtil.sendMessageForTable(tableId, WebsocketResponseBuilder.builderFail(e.getMessage()));
         }
@@ -196,7 +200,9 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
         }
-        return null;
+        List<Bill> billList = new ArrayList<>();
+        billMap.forEach((key,value) -> billList.add(value));
+        return billList;
     }
 
     /**

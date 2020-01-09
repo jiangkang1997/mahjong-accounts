@@ -65,5 +65,5 @@ public interface TableService {
      * @param tableId
      * @return
      */
-    List<String> getPlayer(String tableId);
+    List<User> getPlayer(String tableId);
 }

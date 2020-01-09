@@ -1,34 +1,33 @@
 let layer;
 let user;
-let playerSet = new Set();
+let playerMap = new Map();
 let playerArray = [];
 let tableId;
 let winnerIndex = 0;
 
-window.onload=function(){
+window.onload = function () {
     layui.use('layer', function () {
         layer = layui.layer;
     });
     getUser();
     getTableId();
-    document.getElementById("winner").setAttribute("value",user.userName);
     //与服务器建立websocket连接
-    let url ="ws://127.0.0.1:8080/websocket/"+tableId+"/"+user.userId+"/"+user.userName;
+    let url = "ws://127.0.0.1:8080/websocket/" + tableId + "/" + user.userId + "/" + user.userName;
     let ws = new WebSocket(url);
     ws.onopen = function () {
         console.log("建立 websocket 连接...");
     };
-    ws.onmessage = function(event){
+    ws.onmessage = function (event) {
         let data = JSON.parse(event.data);
-        if(data.code == 0){
-            layer.msg(data.message,{icon: 6});
+        if (data.code == 0) {
+            layer.msg(data.message, {icon: 6});
             getPlayer();
-        }else {
-            layer.alert(data.message,{icon: 2});
+        } else {
+            layer.alert(data.message, {icon: 2});
         }
     };
-    ws.onclose = function(){
-        $('#message_content').append('用户['+username+'] 已经离开聊天室!' + '\n');
+    ws.onclose = function () {
+        $('#message_content').append('用户[' + username + '] 已经离开聊天室!' + '\n');
         console.log("关闭 websocket 连接...");
     }
 };
@@ -39,12 +38,12 @@ function getUser() {
         type: "POST",
         url: "/user/getUser",
         async: false,
-        dataType : "json",
-        success : function(data) {
-            if (data.code == 0){
+        dataType: "json",
+        success: function (data) {
+            if (data.code == 0) {
                 user = data.data;
-            }else{
-                layer.alert("页面初始化失败:"+data.message,{icon: 2});
+            } else {
+                layer.alert("页面初始化失败:" + data.message, {icon: 2});
             }
         }
     });
@@ -56,15 +55,15 @@ function getTableId() {
         type: "POST",
         url: "/table/getTableId",
         async: false,
-        data:{
-            userId:user.userId
+        data: {
+            userId: user.userId
         },
-        dataType : "json",
-        success : function(data) {
-            if (data.code == 0){
+        dataType: "json",
+        success: function (data) {
+            if (data.code == 0) {
                 tableId = data.data;
-            }else{
-                layer.alert("页面初始化失败:"+data.message,{icon: 2});
+            } else {
+                layer.alert("页面初始化失败:" + data.message, {icon: 2});
             }
         }
     });
@@ -75,22 +74,23 @@ function getPlayer() {
         type: "POST",
         url: "/table/getPlayer",
         async: false,
-        data:{
-            tableId:tableId
+        data: {
+            tableId: tableId
         },
-        dataType : "json",
-        success : function(data) {
-            if (data.code == 0){
-                let userNames = data.data;
-                let size = playerSet.size;
-                for (let i=0;i<userNames.length;i++){
-                    playerSet.add(userNames[i]);
+        dataType: "json",
+        success: function (data) {
+            if (data.code == 0) {
+                let users = data.data;
+                let size = playerMap.size;
+                for (let i = 0; i < users.length; i++) {
+                    playerMap.set(users[i].userId, users[i]);
                 }
-                if(playerSet.size !== size){
+                if (playerMap.size !== size) {
                     initPlayerArray();
                 }
-            }else{
-                layer.alert("获取玩家信息失败:"+data.message,{icon: 2});
+                document.getElementById("winner").setAttribute("value", playerArray[winnerIndex].userName);
+            } else {
+                layer.alert("获取玩家信息失败:" + data.message, {icon: 2});
             }
         }
     });
@@ -98,47 +98,51 @@ function getPlayer() {
 
 function initPlayerArray() {
     playerArray = [];
-    playerSet.forEach(function (element, sameElement, set) {
-        playerArray.push(element);
-    });
+    playerMap.forEach(
+        function (value, key, m) {
+            playerArray.push(value);
+        }
+    );
     let redouble_name_labels = $("label.redouble_content_name_label");
     let private_gang_name_labels = $("label.private_gang_winner_name_label");
     let public_gang_winner_name_selects = $("select.public_gang_winner_name_select");
     let public_gang_loser_name_selects = $("select.public_gang_loser_name_select");
-    for(let i=0;i<playerArray.length;i++){
-        $(redouble_name_labels[i]).html(playerArray[i]);
-        $(private_gang_name_labels[i]).html(playerArray[i]);
-        $(public_gang_winner_name_selects).append("<option>"+playerArray[i]+"</option>");
-        $(public_gang_loser_name_selects).append("<option>"+playerArray[i]+"</option>");
+    for (let i = 0; i < playerArray.length; i++) {
+        $(redouble_name_labels[i]).html(playerArray[i].userName);
+        $(redouble_name_labels[i]).parent().next().next().attr("name", playerArray[i].userId);
+        $(private_gang_name_labels[i]).html(playerArray[i].userName);
+        $(private_gang_name_labels[i]).parent().next().next().attr("name", playerArray[i].userId);
+        $(public_gang_winner_name_selects).append("<option value=\"" + playerArray[i].userId + "\">" + playerArray[i].userName + "</option>");
+        $(public_gang_loser_name_selects).append("<option value=\"" + playerArray[i].userId + "\">" + playerArray[i].userName + "</option>");
     }
 }
 
 function onWinnerChange() {
     winnerIndex++;
-    if(winnerIndex === playerArray.length){
+    if (winnerIndex === playerArray.length) {
         winnerIndex = 0;
     }
-    document.getElementById("winner").setAttribute("value",playerArray[winnerIndex]);
+    document.getElementById("winner").setAttribute("value", playerArray[winnerIndex].userName);
 }
 
 function onSub(that) {
     let numLabel = $(that).next();
     let num = numLabel.attr("value");
     num--;
-    if(num < 0){
+    if (num < 0) {
         num = 0;
     }
-    $(numLabel).attr("value",num);
+    $(numLabel).attr("value", num);
 }
 
 function onAdd(that) {
     let numLabel = $(that).prev();
     let num = numLabel.attr("value");
     num++;
-    if(num > 4){
+    if (num > 4) {
         num = 4;
     }
-    $(numLabel).attr("value",num);
+    $(numLabel).attr("value", num);
 }
 
 function onPublicGangAdd() {
@@ -158,5 +162,53 @@ function onPublicGangAdd() {
 }
 
 function commit() {
-    console.log("提交了");
+    let redoubleMap = {};
+    let redouble_num_labels = $("input.redouble_num");
+    for (let i = 0; i < redouble_num_labels.length; i++) {
+        redoubleMap[$(redouble_num_labels[i]).attr("name")] = $(redouble_num_labels[i]).val();
+    }
+    let gangArray = [];
+    let private_gang_num_labels = $("input.private_gang_num");
+    for (let i = 0; i < private_gang_num_labels.length; i++) {
+        let private_gang_num = $(private_gang_num_labels[i]).val();
+        if (private_gang_num !== "0") {
+            for (let i0 = 0; i0 < private_gang_num; i0++) {
+                let gang = {};
+                gang["isPublic"] = false;
+                gang["winner"] =  $(private_gang_num_labels[i]).attr("name");
+                gang["loser"] =  null;
+                gangArray.push(gang);
+            }
+        }
+    }
+    let public_gang_winners = $("select.public_gang_winner_name_select");
+    for (let i = 0; i < public_gang_winners.length; i++) {
+        let winnerId = $(public_gang_winners[i]).val();
+        let loserId = $(public_gang_winners[i]).parent().next().next().children("select.public_gang_loser_name_select").val();
+        let gang = {};
+        gang["isPublic"] = true;
+        gang["winner"] =  winnerId;
+        gang["loser"] =  loserId;
+        gangArray.push(gang);
+    }
+    $.ajax({
+        type: "POST",
+        url: "/account/submit",
+        async: false,
+        data: {
+            providerId:user.userId,
+            winnerId:playerArray[winnerIndex].userId,
+            tableId:tableId,
+            redouble:JSON.stringify(redoubleMap),
+            gangs: JSON.stringify(gangArray),
+        },
+        dataType: "json",
+        success: function (data) {
+            if (data.code == 0) {
+                layer.msg("提交成功，等待其他人提交", {icon: 1});
+            } else {
+                layer.alert("获取玩家信息失败:" + data.message, {icon: 2});
+            }
+        }
+    });
 }
