@@ -47,7 +47,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         redisTemplateMapper.setRelateTableSession(relateTableSession);
         //存放session实体，由于session无法序列化，因此单独存放
         SessionMap.put(session.getId(), session);
-        WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderSuccess("您已成功链接房间"));
+        WebSocketUtil.sendMessage(session, WebsocketResponseBuilder.builderSuccess("您已成功连接房间"));
     }
 
     @Override

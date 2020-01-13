@@ -29,6 +29,13 @@
         where bill_id = #{billId,jdbcType=INTEGER}
     </select>
 
+    <select id="selectByTableId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bill
+        where table_id = #{tableId}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated

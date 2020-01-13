@@ -212,3 +212,7 @@ function commit() {
         }
     });
 }
+
+function look() {
+    window.location.href = '/page/bills';
+}

@@ -51,4 +51,11 @@ public interface BillMapper {
      * @return
      */
     int updateByPrimaryKey(Bill record);
+
+    /**
+     * 获取桌的所有账单
+     * @param tableId
+     * @return
+     */
+    List<Bill> selectByTableId(@Param("tableId") String tableId);
 }

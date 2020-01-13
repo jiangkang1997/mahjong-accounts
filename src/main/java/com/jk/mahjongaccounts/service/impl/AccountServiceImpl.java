@@ -1,5 +1,6 @@
 package com.jk.mahjongaccounts.service.impl;
 
+import com.jk.mahjongaccounts.MahjongAccountsApplication;
 import com.jk.mahjongaccounts.common.BusinessException;
 import com.jk.mahjongaccounts.common.WebSocketUtil;
 import com.jk.mahjongaccounts.common.WebsocketResponseBuilder;
@@ -8,6 +9,7 @@ import com.jk.mahjongaccounts.mapper.RedisTemplateMapper;
 import com.jk.mahjongaccounts.mapper.UserMapper;
 import com.jk.mahjongaccounts.model.AccountInfo;
 import com.jk.mahjongaccounts.model.Bill;
+import com.jk.mahjongaccounts.model.BillVo;
 import com.jk.mahjongaccounts.model.Gang;
 import com.jk.mahjongaccounts.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +66,22 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public List<BillVo> getAccount(String tableId){
+        List<Bill> bills = billMapper.selectByTableId(tableId);
+        Map<Integer,Double> billMap = new HashMap<>(16);
+        for (Bill bill : bills) {
+            Double profit = billMap.put(bill.getUserId(),bill.getProfit());
+            if(profit != null){
+                billMap.put(bill.getUserId(),profit + bill.getProfit());
+            }
+        }
+        List<BillVo> result = new ArrayList<>();
+        billMap.forEach(
+                (key,value) -> result.add(new BillVo(userMapper.getByUserId(key).getUserName(),value))
+        );
+        return result;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     void calculation(String tableId) throws Exception{

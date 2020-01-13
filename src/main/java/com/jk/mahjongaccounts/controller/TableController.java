@@ -173,6 +173,9 @@ public class TableController {
     @RoleCheck
     @RequestMapping("/getPlayer")
     public HttpResponseBuilder getPlayer(String tableId){
+        if(StringUtils.isEmpty(tableId)){
+            return HttpResponseBuilder.builderFail("参数不可为空");
+        }
         try {
             List<User> result = tableService.getPlayer(tableId);
             return HttpResponseBuilder.builderSuccess(result);
