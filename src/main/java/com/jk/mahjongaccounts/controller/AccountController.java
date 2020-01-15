@@ -40,6 +40,7 @@ public class AccountController {
     public HttpResponseBuilder submit(String providerId,String winnerId,String tableId,String redouble,String gangs){
         try {
             List<Gang> gangList = JSON.parseArray(gangs, Gang.class);
+            System.out.println(gangList);
             JSONObject  jsonObject = JSONObject.parseObject(redouble);
             Map<String,Object> redoubleMap = (Map<String,Object>)jsonObject;
             AccountInfo accountInfo = new AccountInfo(providerId,winnerId,tableId,redoubleMap,gangList);

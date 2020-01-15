@@ -125,19 +125,30 @@ public class AccountServiceImpl implements AccountService {
                 throw new BusinessException("开杠情况不统一，请检查重新输入");
             }
         }
-        //检查 明杠,暗杠 的合法性，保证明杠双方的对应关系正确以及暗杠没有恶意输入
+        //检查 ，点笑，闷笑，回头笑 的合法性，保证对应关系正确以及没有恶意输入
         Map<String,Integer> publicGangMap = new HashMap<>(8);
         Map<String,Integer> privateGangMap = new HashMap<>(8);
+        Map<String,Integer> backGangMap = new HashMap<>(8);
         for (AccountInfo accountInfo : accountInfos) {
             List<Gang> gangs = accountInfo.getGangs();
             if (gangs != null && gangs.size() > 0) {
                 for (Gang gang : gangs) {
-                    if (gang.isPublic()) {
+                    //点笑
+                    if (gang.getGangType() == 0) {
                         Integer num = publicGangMap.put(gang.getWinner() + "_" + gang.getLoser(), 1);
                         if (num != null) {
                             publicGangMap.put(gang.getWinner() + "_" + gang.getLoser(), num + 1);
                         }
-                    } else {
+                    }
+                    //回头笑
+                    else if(gang.getGangType() == 1){
+                        Integer num = backGangMap.put(gang.getWinner(), 1);
+                        if (num != null) {
+                            privateGangMap.put(gang.getWinner(), num + 1);
+                        }
+                    }
+                    //闷笑
+                    else if(gang.getGangType() == 2) {
                         Integer num = privateGangMap.put(gang.getWinner(), 1);
                         if (num != null) {
                             privateGangMap.put(gang.getWinner(), num + 1);
@@ -147,12 +158,17 @@ public class AccountServiceImpl implements AccountService {
             }
             for (Map.Entry<String, Integer> entry : publicGangMap.entrySet()) {
                 if (entry.getValue() % 2 != 0) {
-                    throw new BusinessException("明杠的对应关系不一致，请检查重新输入");
+                    throw new BusinessException("点笑的对应关系不一致，请检查重新输入");
                 }
             }
             for (Map.Entry<String, Integer> entry : privateGangMap.entrySet()) {
                 if (entry.getValue() % 4 != 0) {
-                    throw new BusinessException("暗杠情况输入不统一，请检查重新输入");
+                    throw new BusinessException("闷笑情况输入不统一，请检查重新输入");
+                }
+            }
+            for (Map.Entry<String, Integer> entry : backGangMap.entrySet()) {
+                if (entry.getValue() % 4 != 0) {
+                    throw new BusinessException("回头笑情况输入不统一，请检查重新输入");
                 }
             }
 
@@ -165,14 +181,14 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     private List<Bill> creatBill(List<AccountInfo> accountInfos){
-        Map<String,Bill> billMap = new HashMap<>(8);
+        Map<String,Bill> billMap = new HashMap<>(4);
         for (AccountInfo accountInfo : accountInfos) {
             Bill bill = new Bill(Integer.parseInt(accountInfo.getProviderId()),accountInfo.getTableId());
             billMap.put(String.valueOf(bill.getUserId()),bill);
         }
         //开杠情况
         Map<String,Integer> redouble = accountInfos.get(0).getRedouble();
-        //先算胡牌
+        //胡牌
         String winner = accountInfos.get(0).getWinnerId();
         int count = 0;
         for (AccountInfo accountInfo : accountInfos) {
@@ -187,11 +203,11 @@ public class AccountServiceImpl implements AccountService {
         }
         Bill winnerBill = billMap.get(winner);
         winnerBill.setProfit(winnerBill.getProfit() + count);
-        //明杠和暗杠
+        //点笑，闷笑，回头笑
         for (AccountInfo accountInfo : accountInfos) {
             for (Gang gang : accountInfo.getGangs()) {
-                //明杠
-                if(gang.isPublic()){
+                //点笑
+                if(gang.getGangType() == 0){
                     Bill gangWinnerBill = billMap.get(gang.getWinner());
                     Bill gangLoserBill = billMap.get(gang.getLoser());
                     double cost = baseScore * 1/2
@@ -200,9 +216,9 @@ public class AccountServiceImpl implements AccountService {
                     gangWinnerBill.setProfit(gangWinnerBill.getProfit() + cost);
                     gangLoserBill.setProfit(gangLoserBill.getProfit() - cost);
                 }
-                //暗杠
-                else {
-                    Bill gangBill = billMap.get(gang.getWinner());
+                //回头笑
+                else if(gang.getGangType() == 1){
+                    Bill gangWinnerBill = billMap.get(gang.getWinner());
                     int gangCount  = 0;
                     for (AccountInfo info : accountInfos) {
                         if(!info.getProviderId().equals(gang.getWinner())){
@@ -214,7 +230,23 @@ public class AccountServiceImpl implements AccountService {
                             gangCount += cost;
                         }
                     }
-                    gangBill.setProfit(gangBill.getProfit() + gangCount);
+                    gangWinnerBill.setProfit(gangWinnerBill.getProfit() + gangCount);
+                }
+                //闷笑
+                else if(gang.getGangType() == 2) {
+                    Bill gangWinnerBill = billMap.get(gang.getWinner());
+                    int gangCount  = 0;
+                    for (AccountInfo info : accountInfos) {
+                        if(!info.getProviderId().equals(gang.getWinner())){
+                            Bill bill = billMap.get(info.getProviderId());
+                            double cost = baseScore * 2
+                                    * Math.pow(2,redouble.get(info.getProviderId()))
+                                    * Math.pow(2,redouble.get(gang.getWinner()));
+                            bill.setProfit(bill.getProfit() + (-1 * cost) );
+                            gangCount += cost;
+                        }
+                    }
+                    gangWinnerBill.setProfit(gangWinnerBill.getProfit() + gangCount);
                 }
             }
         }

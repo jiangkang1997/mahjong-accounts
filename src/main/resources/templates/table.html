@@ -99,7 +99,7 @@
 
     <div class="private_gang">
         <div class="private_gang_title_div">
-            <label class="private_gang_title_title_label">暗杠</label>
+            <label class="private_gang_title_title_label">闷笑</label>
         </div>
 
         <div class="private_gang_content_div">
@@ -168,9 +168,80 @@
         </div>
     </div>
 
+    <div class="back_gang">
+        <div class="back_gang_title_div">
+            <label class="back_gang_title_title_label">回头笑</label>
+        </div>
+
+        <div class="back_gang_content_div">
+            <div class="back_gang_winner_name_div">
+                <label class="back_gang_winner_name_label"></label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" class="back_gang_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+        <div class="back_gang_content_div">
+            <div class="back_gang_winner_name_div">
+                <label class="back_gang_winner_name_label"></label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" class="back_gang_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+        <div class="back_gang_content_div">
+            <div class="back_gang_winner_name_div">
+                <label class="back_gang_winner_name_label"></label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" class="back_gang_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+        <div class="back_gang_content_div">
+            <div class="back_gang_winner_name_div">
+                <label class="back_gang_winner_name_label"></label>
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onSub(this)">
+                <i class="layui-icon">&#xe603;</i>
+            </button>
+            <input type="text" class="back_gang_num" readonly="readonly" value="0"/>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                    style="height: 50px;width: 75px;float: left"
+                    onclick="onAdd(this)">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+    </div>
+
     <div class="public_gang">
         <div class="public_gang_title_div">
-            <label class="public_gang_title_title_label">明杠</label>
+            <label class="public_gang_title_title_label">点笑</label>
         </div>
 
         <div id="public_gang_contents"></div>
@@ -178,6 +249,12 @@
             <button type="button" class="layui-btn"
                     style="margin-left: 200px" onclick="onPublicGangAdd()">
                 <i class="layui-icon">&#xe608;</i> 添加
+            </button>
+        </div>
+        <div id="sub" style="height: 50px; width: 500px">
+            <button type="button" class="layui-btn layui-btn-danger"
+                    style="margin-left: 200px" onclick="onPublicGangSub()">
+                <i class="layui-icon">&#xe616;</i> 删除
             </button>
         </div>
     </div>

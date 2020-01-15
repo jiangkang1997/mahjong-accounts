@@ -105,6 +105,7 @@ function initPlayerArray() {
     );
     let redouble_name_labels = $("label.redouble_content_name_label");
     let private_gang_name_labels = $("label.private_gang_winner_name_label");
+    let back_gang_name_labels = $("label.back_gang_winner_name_label");
     let public_gang_winner_name_selects = $("select.public_gang_winner_name_select");
     let public_gang_loser_name_selects = $("select.public_gang_loser_name_select");
     for (let i = 0; i < playerArray.length; i++) {
@@ -112,6 +113,8 @@ function initPlayerArray() {
         $(redouble_name_labels[i]).parent().next().next().attr("name", playerArray[i].userId);
         $(private_gang_name_labels[i]).html(playerArray[i].userName);
         $(private_gang_name_labels[i]).parent().next().next().attr("name", playerArray[i].userId);
+        $(back_gang_name_labels[i]).html(playerArray[i].userName);
+        $(back_gang_name_labels[i]).parent().next().next().attr("name", playerArray[i].userId);
         $(public_gang_winner_name_selects).append("<option value=\"" + playerArray[i].userId + "\">" + playerArray[i].userName + "</option>");
         $(public_gang_loser_name_selects).append("<option value=\"" + playerArray[i].userId + "\">" + playerArray[i].userName + "</option>");
     }
@@ -156,39 +159,61 @@ function onPublicGangAdd() {
         "            <div class=\"public_gang_loser_name_div\">\n" +
         "                <select class=\"public_gang_loser_name_select\" style=\"height: 50px;width: 75px\"></select>\n" +
         "            </div>\n" +
-        "        </div>"
+        "        </div>";
     document.getElementById("public_gang_contents").innerHTML += html;
     initPlayerArray();
 }
 
+function onPublicGangSub() {
+    let public_gang_content_divs = $("div.public_gang_content_div");
+    $(public_gang_content_divs[public_gang_content_divs.length-1]).remove();
+}
+
 function commit() {
     let redoubleMap = {};
+    //开杠
     let redouble_num_labels = $("input.redouble_num");
     for (let i = 0; i < redouble_num_labels.length; i++) {
         redoubleMap[$(redouble_num_labels[i]).attr("name")] = $(redouble_num_labels[i]).val();
     }
     let gangArray = [];
+    //闷笑
     let private_gang_num_labels = $("input.private_gang_num");
     for (let i = 0; i < private_gang_num_labels.length; i++) {
         let private_gang_num = $(private_gang_num_labels[i]).val();
         if (private_gang_num !== "0") {
             for (let i0 = 0; i0 < private_gang_num; i0++) {
                 let gang = {};
-                gang["isPublic"] = false;
-                gang["winner"] =  $(private_gang_num_labels[i]).attr("name");
-                gang["loser"] =  null;
+                gang["gangType"] = 2;
+                gang["winner"] = $(private_gang_num_labels[i]).attr("name");
+                gang["loser"] = null;
                 gangArray.push(gang);
             }
         }
     }
+    //回头笑
+    let back_gang_num_labels = $("input.back_gang_num");
+    for (let i = 0; i < back_gang_num_labels.length; i++) {
+        let back_gang_num = $(back_gang_num_labels[i]).val();
+        if (back_gang_num !== "0") {
+            for (let i0 = 0; i0 < back_gang_num; i0++) {
+                let gang = {};
+                gang["gangType"] = 1;
+                gang["winner"] = $(private_gang_num_labels[i]).attr("name");
+                gang["loser"] = null;
+                gangArray.push(gang);
+            }
+        }
+    }
+    //点笑
     let public_gang_winners = $("select.public_gang_winner_name_select");
     for (let i = 0; i < public_gang_winners.length; i++) {
         let winnerId = $(public_gang_winners[i]).val();
         let loserId = $(public_gang_winners[i]).parent().next().next().children("select.public_gang_loser_name_select").val();
         let gang = {};
-        gang["isPublic"] = true;
-        gang["winner"] =  winnerId;
-        gang["loser"] =  loserId;
+        gang["gangType"] = 0;
+        gang["winner"] = winnerId;
+        gang["loser"] = loserId;
         gangArray.push(gang);
     }
     $.ajax({
@@ -196,10 +221,10 @@ function commit() {
         url: "/account/submit",
         async: false,
         data: {
-            providerId:user.userId,
-            winnerId:playerArray[winnerIndex].userId,
-            tableId:tableId,
-            redouble:JSON.stringify(redoubleMap),
+            providerId: user.userId,
+            winnerId: playerArray[winnerIndex].userId,
+            tableId: tableId,
+            redouble: JSON.stringify(redoubleMap),
             gangs: JSON.stringify(gangArray),
         },
         dataType: "json",

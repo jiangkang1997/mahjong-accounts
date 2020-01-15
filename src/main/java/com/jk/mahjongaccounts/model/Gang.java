@@ -12,9 +12,9 @@ import java.io.Serializable;
 public class Gang implements Serializable {
 
     /**
-     * false:暗杠   true：明杠
+     * 0:点笑  1：回头笑   2.闷笑
      */
-    private boolean isPublic;
+    private Integer gangType;
 
     /**
      * 赢家（用户id）

@@ -43,6 +43,12 @@
     font-size: 20px;
     margin-left: 225px;
 }
+.back_gang_title_title_label{
+    width: 60px;
+    height: 40px;
+    font-size: 20px;
+    margin-left: 218px;
+}
 .redouble_title_div{
     width: 500px;
     height: 30px;
@@ -54,6 +60,11 @@
     margin-bottom: 10px;
 }
 .private_gang_title_div{
+    width: 500px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+.back_gang_title_div{
     width: 500px;
     height: 30px;
     margin-bottom: 10px;
@@ -87,12 +98,27 @@
     margin-left: 5px;
     margin-right: 5px;
 }
+.back_gang_num{
+    float: left;
+    width: 150px;
+    height: 45px;
+    font-size: 30px;
+    text-align:center;
+    color: red;
+    margin-left: 5px;
+    margin-right: 5px;
+}
 .redouble_content_div{
     width: 500px ;
     height: 50px ;
     margin-bottom: 5px
 }
 .private_gang_content_div{
+    width: 500px ;
+    height: 50px ;
+    margin-bottom: 5px
+}
+.back_gang_content_div{
     width: 500px ;
     height: 50px ;
     margin-bottom: 5px
@@ -112,6 +138,11 @@
      height: 50px;
      float: left
  }
+.back_gang_winner_name_div{
+    width: 90px;
+    height: 50px;
+    float: left
+}
 .public_gang_winner_name_div{
     width: 90px;
     height: 50px;
@@ -145,11 +176,21 @@
     padding-top: 5px;
     padding-left: 10px
 }
+.back_gang_winner_name_label{
+    float: left;
+    font-size: 20px;
+    padding-top: 5px;
+    padding-left: 10px
+}
 .main .public_gang{
     margin-top: 50px;
     width: 500px;
 }
 .main .private_gang{
+    margin-top: 50px;
+    width: 500px;
+}
+.main .back_gang{
     margin-top: 50px;
     width: 500px;
 }
