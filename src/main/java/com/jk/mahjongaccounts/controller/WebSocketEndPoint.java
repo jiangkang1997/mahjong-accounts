@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 import com.jk.mahjongaccounts.common.*;
 import com.jk.mahjongaccounts.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ServerEndpoint("/websocket/{tableId}/{userId}/{userName}")
 @Component
+@Lazy
 public class WebSocketEndPoint {
 
     private WebSocketService webSocketService;

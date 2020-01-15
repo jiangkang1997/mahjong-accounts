@@ -2,12 +2,14 @@ package com.jk.mahjongaccounts.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 描述 “杠” 的关系的类
  * @author jk
  */
 @Data
-public class Gang {
+public class Gang implements Serializable {
 
     /**
      * false:暗杠   true：明杠

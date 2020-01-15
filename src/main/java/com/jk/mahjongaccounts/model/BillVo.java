@@ -3,12 +3,14 @@ package com.jk.mahjongaccounts.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author jk
  */
 @Data
 @AllArgsConstructor
-public class BillVo {
+public class BillVo implements Serializable {
 
     /**
      * 用户名

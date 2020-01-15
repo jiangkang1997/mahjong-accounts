@@ -12,7 +12,7 @@ window.onload = function () {
     getUser();
     getTableId();
     //与服务器建立websocket连接
-    let url = "ws://127.0.0.1:8080/websocket/" + tableId + "/" + user.userId + "/" + user.userName;
+    let url = "ws://47.103.3.1:8081/websocket/" + tableId + "/" + user.userId + "/" + user.userName;
     let ws = new WebSocket(url);
     ws.onopen = function () {
         console.log("建立 websocket 连接...");

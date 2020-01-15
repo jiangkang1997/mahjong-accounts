@@ -3,6 +3,7 @@ package com.jk.mahjongaccounts.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-public class AccountInfo {
+public class AccountInfo implements Serializable {
 
     private String providerId;
 

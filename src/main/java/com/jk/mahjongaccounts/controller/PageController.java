@@ -1,9 +1,8 @@
 package com.jk.mahjongaccounts.controller;
 
-import com.jk.mahjongaccounts.common.RoleCheck;
+import com.jk.mahjongaccounts.common.PageFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -18,19 +17,19 @@ public class PageController {
         return "login";
     }
 
-    @RoleCheck
+    @PageFilter
     @GetMapping("/home")
     public String home(){
         return "home";
     }
 
-    @RoleCheck
+    @PageFilter
     @GetMapping("/table")
     public String table(){
         return "table";
     }
 
-    @RoleCheck
+    @PageFilter
     @GetMapping("/bills")
     public String bills(){
         return "bills";

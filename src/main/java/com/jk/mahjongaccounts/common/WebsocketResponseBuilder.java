@@ -2,11 +2,13 @@ package com.jk.mahjongaccounts.common;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author jk
  */
 @Data
-public class WebsocketResponseBuilder {
+public class WebsocketResponseBuilder implements Serializable {
 
     /**
      * 返回码  0：成功  -1：失败

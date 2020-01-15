@@ -2,6 +2,7 @@ package com.jk.mahjongaccounts.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import java.util.Set;
  * @author jk
  */
 @Data
-public class RelateTableSession {
+public class RelateTableSession implements Serializable {
 
     private String tableId;
 
