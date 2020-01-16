@@ -210,9 +210,7 @@ public class AccountServiceImpl implements AccountService {
                 if(gang.getGangType() == 0){
                     Bill gangWinnerBill = billMap.get(gang.getWinner());
                     Bill gangLoserBill = billMap.get(gang.getLoser());
-                    double cost = baseScore * 1/2
-                            * Math.pow(2,redouble.get(gang.getWinner()))
-                            * Math.pow(2,redouble.get(gang.getLoser()));
+                    double cost = baseScore * 1/2;
                     gangWinnerBill.setProfit(gangWinnerBill.getProfit() + cost);
                     gangLoserBill.setProfit(gangLoserBill.getProfit() - cost);
                 }
@@ -223,9 +221,7 @@ public class AccountServiceImpl implements AccountService {
                     for (AccountInfo info : accountInfos) {
                         if(!info.getProviderId().equals(gang.getWinner())){
                             Bill bill = billMap.get(info.getProviderId());
-                            double cost = baseScore
-                                    * Math.pow(2,redouble.get(info.getProviderId()))
-                                    * Math.pow(2,redouble.get(gang.getWinner()));
+                            double cost = baseScore;
                             bill.setProfit(bill.getProfit() + (-1 * cost) );
                             gangCount += cost;
                         }
@@ -239,9 +235,7 @@ public class AccountServiceImpl implements AccountService {
                     for (AccountInfo info : accountInfos) {
                         if(!info.getProviderId().equals(gang.getWinner())){
                             Bill bill = billMap.get(info.getProviderId());
-                            double cost = baseScore * 2
-                                    * Math.pow(2,redouble.get(info.getProviderId()))
-                                    * Math.pow(2,redouble.get(gang.getWinner()));
+                            double cost = baseScore * 2;
                             bill.setProfit(bill.getProfit() + (-1 * cost) );
                             gangCount += cost;
                         }
